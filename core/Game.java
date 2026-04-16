@@ -23,11 +23,14 @@ public class Game extends BasicGameState
 		return id;		
 	}
 
-		public ArrayList<Stage> stages = new ArrayList<>();
+	public ArrayList<Stage> stages = new ArrayList<>();
 
-private String stage = "nada"; //none selected
+	private String stage = "nada"; //none selected
 
-private int stageInt = -1; //nothing
+	Player player;
+
+	private int stageInt = -1; //nothing
+
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException 
 	{
@@ -37,15 +40,19 @@ private int stageInt = -1; //nothing
 		Sounds.loadSounds();
 		stages.add(new TestStage());
 		stages.add(new ShibuyaStage());
+		//player = new Player(1920/2, 1080/2);
 
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
 	{
+		player.step();
 
-
-
-
+		if (gc.getInput().isKeyDown(Input.KEY_D)) {
+			player.playerRight();
+		} else if (gc.getInput().isKeyDown(Input.KEY_A)) {
+			player.playerLeft();
+		}
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException 
@@ -56,6 +63,7 @@ private int stageInt = -1; //nothing
 		if(stage.equals("Shibuya")&&stage!=null){
 			stages.get(1).renderStage(g);
 		}
+		player.draw(g);
 
 	}
 	
@@ -90,6 +98,13 @@ private int stageInt = -1; //nothing
 				stages.get(stageInt).playSong();
 				break;
 			default:
+		}
+
+		//If it crashes due to the null expression, just try to comment the bottom out until we can fix it
+		if (player != null) {
+			if (key == Input.KEY_SPACE) {
+				player.jump();
+			}
 		}
 	}
 	
