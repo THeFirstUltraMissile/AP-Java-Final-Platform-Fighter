@@ -9,7 +9,7 @@ public class Sounds {
     public static void loadSounds() throws SlickException
     {
 
-            TestSong =  new Music("media/music/testSong.ogg");
+            //TestSong =  new Music("media/music/testSong.ogg");
 
 
     }

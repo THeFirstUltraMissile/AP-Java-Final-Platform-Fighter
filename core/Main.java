@@ -46,6 +46,7 @@ public class Main extends StateBasedGame
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
 		
 			appgc.setDisplayMode(appgc.getScreenWidth(), appgc.getScreenHeight(), false);
+			appgc.setDisplayMode(1920, 1080, false);
 			appgc.setTargetFrameRate(FRAMES_PER_SECOND);
 			appgc.setVSync(true);
 			appgc.start();

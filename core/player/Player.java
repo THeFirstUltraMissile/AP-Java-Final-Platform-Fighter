@@ -11,103 +11,223 @@ public class Player {
     private int wi;
     private int hi;
 
-    private double hsp;
-    private double vsp;
-    private int jumpH;
-    private double grv;
+    private double horizontalSpeed;
+    private double verticalSpeed;
+    private int jumpHeight;
+    private double gravityValue;
     private double walkSpeed;
     private double accel;
-    private double accelFinal; //change to int as necessary
+    private double maxAccel;
     private double accelMax;
-    private double lastH;
+    private double direction;
     private String playerDirection;
 
     private Color pink;
     private Image currentSprite;
 
-    private int currentHealth;
-    private int maxHealth;
+    private boolean facingRight = true;
+    private int damageTaken = 0;
+
+    private boolean isCrouching;
+    private boolean isAttacking;
+
+    private int attackTimer = 0;
+    private static final int ATTACK_DURATION = 10;
 
     public Player(int x, int y) {
         this.x = x;
         this.y = y;
         wi = 64;
-        hi = wi;
+        hi = 128;
 
-        hsp = 0;
-        vsp = 0;
-        jumpH = 24;
-        grv = 0.75; //0.75
+        horizontalSpeed = 0;
+        verticalSpeed = 0;
+        jumpHeight = 24;
+        gravityValue = 0.75;
         walkSpeed = 1.25;
         accel = 0.8;
-        accelFinal = 0;
-        accelMax = 8;
-        lastH = 0.00;
+        maxAccel = 0;
+        accelMax = 5;
+        direction = 0.00;
 
-        playerDirection = "right"; //Will be affected by spawn location. It dictates which sprite will be drawn.
         pink = new Color(255, 0, 255);
-
-        maxHealth = 100;
-        currentHealth = maxHealth;
     }
 
-    public void step() { //every frame events!
+    public void step() {
         applyGravity();
 
-        //Acceleration, do later!
-//        if (isMoving()) {
-//            if (lastH != 1) {
-//                lastH = 1;
-//                accelFinal = 0;
-//            }
-//            if (accelFinal <= accelMax) {
-//                accelFinal += accel;
-//            }
-//        } else {
-//            if (accelFinal > 0) {
-//                accelFinal -= accel * 2;
-//            }
-//        }
-//
-//        if (accelFinal < accel) {
-//            accelFinal = 0;
-//            lastH = 0;
-//        }
+        if (isMoving()) {
+            if (maxAccel <= accelMax) {
+                maxAccel += accel;
+            }
+        } else {
+            if (maxAccel > 0) {
+                maxAccel -= accel * 2;
+            }
+        }
 
-        hsp = accelFinal * lastH;
+        if (maxAccel < accel) {
+            maxAccel = 0;
+            direction = 0;
+        }
 
-        x += hsp;
-        //y += vsp;
-        hsp = 0;
+        horizontalSpeed = maxAccel * direction;
+
+        x += horizontalSpeed;
+        y += verticalSpeed;
+        horizontalSpeed = 0;
     }
+
+    private void applyGravity() {
+        if (verticalSpeed < 15) {
+            verticalSpeed += gravityValue;
+        }
+        if (verticalSpeed < -15) {
+            verticalSpeed = -15;
+        }
+    }
+
+    public void crouch() {
+        if (!isCrouching) {
+            isCrouching = true;
+            hi = hi / 2;
+        }
+    }
+
+    public void unCrouch() {
+        if (isCrouching) {
+            isCrouching = false;
+            hi = hi * 2;
+        }
+    }
+
+    public void lightAttack(int duration) {
+        if (!isAttacking) {
+            isAttacking = true;
+            attackTimer = duration;
+        }
+    }
+
+    public void stopAttacking() {
+        isAttacking = false;
+        attackTimer = 0;
+    }
+
 
     public void draw(Graphics g) {
         g.setColor(Color.white);
-        g.drawString("have you tried giving your heart to joc", Main.getScreenWidth() * .5f, Main.getScreenHeight() * .10f);
         g.setColor(pink);
         g.fillRect(x, y, wi, hi);
     }
 
-    private void applyGravity() {
-        vsp += grv;
-    }
 
     public void jump() {
-        vsp += -jumpH;
+        verticalSpeed += -jumpHeight;
     }
 
     public void playerLeft() {
-        hsp += -walkSpeed;
+        direction = -1;
+        facingRight = false;
     }
 
     public void playerRight() {
-        hsp += walkSpeed;
+        direction = 1;
+        facingRight = true;
+    }
+
+    public void setX(float newX) {
+        x = newX;
+    }
+
+    public void setY(float newY) {
+        y = newY;
+    }
+
+    public void setVerticalSpeed(double newverticalSpeed) {
+        verticalSpeed = newverticalSpeed;
+    }
+
+    public void setHorizontalSpeed(double newhorizontalSpeed) {
+        horizontalSpeed = newhorizontalSpeed;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getXAccel() {
+        return (float) horizontalSpeed;
+    }
+
+    public float getYAccel() {
+        return (float) verticalSpeed;
+    }
+
+    public int getWidth() {
+        return wi;
+    }
+
+    public int getHeight() {
+        return hi;
+    }
+
+    public float getBottom() {
+        return y + hi;
+    }
+
+    public float getRight() {
+        return x + wi;
     }
 
     private boolean isMoving() {
-        if (hsp == 0) {
-            return true;
-        }
-        return false;
+        return direction != 0;
     }
+
+    public void stopMoving() {
+        direction = 0;
+    }
+
+    public boolean isCrouching() {
+        return isCrouching;
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    public void takeDamage(int dmg) {
+        damageTaken += dmg;
+    }
+
+    public void applyKnockback(float kbX, float kbY) {
+        setHorizontalSpeed(kbX);
+        setVerticalSpeed(kbY);
+    }
+
+    public int getDamage() {
+        return damageTaken;
+    }
+
+    public float getAttackRadius() {
+        return 1;
+    }
+
+    public float getAttackValue() {
+        return 1;
+    }
+
+    public float getKbValue() {
+        return 1;
+    }
+
+    public boolean isFacingRight() {
+        return facingRight;
+    }
+
+
+    // I THOUGHT I WAS DOING ART SO WHY AM I CODING????????? - James
 }

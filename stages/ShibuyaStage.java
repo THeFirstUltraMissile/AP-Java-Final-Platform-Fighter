@@ -3,10 +3,16 @@ package stages;
 import core.Images;
 import core.Main;
 import core.Sounds;
+import core.player.Player;
+import hitboxes.StageCollision;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 public class ShibuyaStage extends Stage{
+
+
+    StageCollision testCollision;
+
     public ShibuyaStage() {
         name = "Shibuya";
         song = Sounds.TestSong; //temp will make song later
@@ -17,7 +23,7 @@ public class ShibuyaStage extends Stage{
         height = Main.getScreenHeight()/3;
         x = 0;
         y = Main.getScreenHeight()-height;
-
+        testCollision = new StageCollision();
 
 
     }
@@ -31,12 +37,13 @@ public class ShibuyaStage extends Stage{
 
     }
 
-    public void updateStage() {
-
+    public void updateStage(Player p1, Player p2) {
+        testCollision.collisionChecks(p1, x, y, width, height);
+        testCollision.collisionChecks(p2, x, y, width, height);
     }
 
     public void playSong() {
-    song.loop();
+    //song.loop();
     }
 
 }
