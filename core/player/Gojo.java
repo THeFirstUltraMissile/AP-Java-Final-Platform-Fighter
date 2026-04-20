@@ -10,8 +10,10 @@ public class Gojo extends Player {
     private Animation idleAnim;
     private Animation lightAttackAnim;
     private Animation currentAnim;
+    private Animation heavyAttackAnim;
 
     private boolean wasAttacking = false;
+    private boolean wasHeavyAttacking = false;
 
     public Gojo(int x, int y) throws SlickException {
         super(x, y);
@@ -23,11 +25,15 @@ public class Gojo extends Player {
                 "media/sprites/kaisen/gojosatoru/assets_gojosatoru/satoru.png", 670, 670);
 
         SpriteSheet lightAttackSheet = new SpriteSheet(
-                "media/sprites/kaisen/gojosatoru/basic/gojo_jab.png", 128, 128);
+                "media/sprites/unused/stone.png", 128, 128);
+
+        SpriteSheet heavySheet = new SpriteSheet("media/sprites/kaisen/gojosatoru/basic/gojo_smash.png", 256, 256);
 
         idleAnim = new Animation(idleSheet, 150);
         lightAttackAnim = new Animation(lightAttackSheet, 60);
         lightAttackAnim.setLooping(false);
+        heavyAttackAnim = new Animation(heavySheet, 60);
+        heavyAttackAnim.setLooping(false);
 
         currentAnim = idleAnim;
     }
@@ -36,15 +42,18 @@ public class Gojo extends Player {
     public void step() {
         super.step();
 
-        if (isAttacking()) {
-            if (!wasAttacking) {
-                lightAttackAnim.restart();
-            }
+        if (isHeavyAttacking()) {
+            if (!wasHeavyAttacking) heavyAttackAnim.restart();
+            currentAnim = heavyAttackAnim;
+        } else if (isLightAttacking()) {
+            if (!wasAttacking) lightAttackAnim.restart();
             currentAnim = lightAttackAnim;
         } else {
             currentAnim = idleAnim;
         }
-        wasAttacking = isAttacking();
+
+        wasHeavyAttacking = isHeavyAttacking();
+        wasAttacking = isLightAttacking();
         currentAnim.update(16);
     }
 
@@ -59,13 +68,14 @@ public class Gojo extends Player {
     }
     public void drawAttack(Graphics g) {
         if (!isAttacking()) return;
-        org.newdawn.slick.Image attackFrame = lightAttackAnim.getCurrentFrame();
+        Animation attackAnim = isHeavyAttacking() ? heavyAttackAnim : lightAttackAnim;
+        org.newdawn.slick.Image frame = attackAnim.getCurrentFrame();
         if (isFacingRight()) {
-            attackFrame.draw(getX() + getWidth(), getY(), getWidth(), getHeight());
+            frame.draw(getX() + getWidth(), getY(), getWidth(), getHeight());
         } else {
-
-            attackFrame.draw(getX(), getY(), -getWidth(), getHeight());
+            frame.draw(getX(), getY(), -getWidth(), getHeight());
         }
+
     }
 
     @Override
