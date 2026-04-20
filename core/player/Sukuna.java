@@ -10,6 +10,8 @@ public class Sukuna extends Player {
     private Animation idleAnim;
     private Animation lightAttackAnim;
     private Animation currentAnim;
+    private Animation heavyAttackAnim;
+    private boolean wasHeavyAttacking = false;
 
     private boolean wasAttacking = false;
 
@@ -26,6 +28,10 @@ public class Sukuna extends Player {
         SpriteSheet lightAttackSheet = new SpriteSheet(
                 "media/sprites/kaisen/ryomensukuna/basic/sukuna_jab.png", 128, 128);
 
+        SpriteSheet heavySheet = new SpriteSheet("media/sprites/kaisen/ryomensukuna/shrine/dismantle/sukuna_dismantleimpact.png", 256, 256);
+
+        heavyAttackAnim = new Animation(heavySheet, 60);
+        heavyAttackAnim.setLooping(false);
         idleAnim = new Animation(idleSheet, 150);
         lightAttackAnim = new Animation(lightAttackSheet, 60);
         lightAttackAnim.setLooping(false);
@@ -37,15 +43,18 @@ public class Sukuna extends Player {
     public void step() {
         super.step();
 
-        if (isAttacking()) {
-            if (!wasAttacking) {
-                lightAttackAnim.restart();
-            }
+        if (isHeavyAttacking()) {
+            if (!wasHeavyAttacking) heavyAttackAnim.restart();
+            currentAnim = heavyAttackAnim;
+        } else if (isLightAttacking()) {
+            if (!wasAttacking) lightAttackAnim.restart();
             currentAnim = lightAttackAnim;
         } else {
             currentAnim = idleAnim;
         }
-        wasAttacking = isAttacking();
+
+        wasHeavyAttacking = isHeavyAttacking();
+        wasAttacking = isLightAttacking();
         currentAnim.update(16);
     }
 
@@ -60,13 +69,13 @@ public class Sukuna extends Player {
     }
 
     public void drawAttack(Graphics g) {
-        if (!isAttacking()) return;  // stops attacking
-        org.newdawn.slick.Image attackFrame = lightAttackAnim.getCurrentFrame();
+        if (!isAttacking()) return;
+        Animation attackAnim = isHeavyAttacking() ? heavyAttackAnim : lightAttackAnim;
+        org.newdawn.slick.Image frame = attackAnim.getCurrentFrame();
         if (isFacingRight()) {
-            attackFrame.draw(getX() + getWidth(), getY(), getWidth(), getHeight());
+            frame.draw(getX() + getWidth(), getY(), getWidth(), getHeight());
         } else {
-
-            attackFrame.draw(getX(), getY(), -getWidth(), getHeight());
+            frame.draw(getX(), getY(), -getWidth(), getHeight());
         }
     }
 
