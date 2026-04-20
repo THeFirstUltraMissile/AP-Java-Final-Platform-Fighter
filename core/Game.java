@@ -116,7 +116,7 @@ public class Game extends BasicGameState {
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
         stages.get(stageInt).renderStage(g);
-
+        combatUI(g);
 
         player1.draw(g);
         player2.draw(g);
@@ -237,6 +237,43 @@ public class Game extends BasicGameState {
         }
     }
 
+    public void combatUI(Graphics g)
+	{
+	playerMarkers(g);
+	playerHealthIndicators(g);
+	}
+	public void playerMarkers(Graphics g)
+	{
+		 float middleX1 = player1.getX()+ (float) player1.getWidth() /2;
+		g.setColor(Color.red);
+		g.drawLine(middleX1,player1.getY()-25,middleX1-30,player1.getY()-55);
+		g.drawLine(middleX1,player1.getY()-25,middleX1+30,player1.getY()-55);
+		g.drawString("p1",middleX1-5,player1.getY()-60);
+
+		float middleX2 = player2.getX()+ (float) player2.getWidth() /2;
+		g.setColor(Color.blue);
+		g.drawLine(middleX2,player2.getY()-25,middleX2-30,player2.getY()-55);
+		g.drawLine(middleX2,player2.getY()-25,middleX2+30,player2.getY()-55);
+		g.drawString("p2",middleX2-5,player2.getY()-60);
+	}
+	public void playerHealthIndicators(Graphics g)
+	{
+		float x1 = Main.getScreenWidth()*0.33f-64;
+		float x2 = Main.getScreenWidth()*0.66f-64;
+		g.setColor(Color.red);
+		g.fillRect(x1,950,128,128);
+		g.setColor(Color.white);
+		g.drawString("p1",x1+64,975);
+		g.drawString(String.valueOf(player1.getDamage()),x1+64,1040);
+
+		g.setColor(Color.blue);
+		g.fillRect(x2,950,128,128);
+		g.setColor(Color.white);
+		g.drawString("p2",x2+64,975);
+		g.drawString(String.valueOf(player2.getDamage()),x2+64,1040);
+	}
+
+    
     public void mousePressed(int button, int x, int y) {
     }
 }
