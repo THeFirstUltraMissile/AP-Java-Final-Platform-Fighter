@@ -20,6 +20,7 @@ public class Player {
     private double maxAccel;
     protected double accelMax;
     private double direction;
+    private int jumpsRemaining = 2;
 
     private Color pink;
 
@@ -30,6 +31,8 @@ public class Player {
     protected boolean isAttacking;
     private int attackTimer = 0;
     private float knockbackX = 0;
+    private boolean heavyAttack = false;
+    private float attackValue;
 
     public Player(int x, int y) {
         this.x = x;
@@ -112,6 +115,15 @@ public class Player {
         if (!isAttacking) {
             isAttacking = true;
             attackTimer = duration;
+            heavyAttack = false;
+        }
+    }
+
+    public void heavyAttack(int duration) {
+        if (!isAttacking()) {
+            attackTimer = duration;
+            heavyAttack = true;
+            isAttacking = true;
         }
     }
 
@@ -120,6 +132,7 @@ public class Player {
 
     public void stopAttacking() {
         isAttacking = false;
+        heavyAttack = false;
         attackTimer = 0;
     }
 
@@ -129,7 +142,14 @@ public class Player {
     }
 
     public void jump() {
-        verticalSpeed = -jumpHeight;
+        if (jumpsRemaining > 0) {
+            setVerticalSpeed(-15f);
+            jumpsRemaining--;
+        }
+    }
+
+    public void setOnGround(boolean grounded) {
+        if (grounded) jumpsRemaining = 2;
     }
 
     public void playerLeft() {
@@ -200,6 +220,22 @@ public class Player {
 
     public boolean isAttacking() {
         return isAttacking;
+    }
+
+    public boolean isHeavyAttacking() {
+        return attackTimer > 0 && heavyAttack;
+    }
+
+    public boolean isLightAttacking() {
+        return attackTimer > 0 && !heavyAttack;
+    }
+
+    public float getHeavyAttackValue() {
+        return attackValue * 2.5f;
+    }
+
+    public float getHeavyKbValue() {
+        return knockbackX * 2.5f;
     }
 
     public boolean isFacingRight() {
