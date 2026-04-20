@@ -4,7 +4,7 @@ import core.player.Player;
 
 public class AttackHitBox extends HitBox {
 
-    public void checkAttackHit(Player attacker, Player target, float attackRadius, float attackValue, float kbValue, float specialValue, int attackDuration) {
+    public void checkAttackHit(Player attacker, Player target, float attackRadius, float attackValue, float kbValue, float specialValue) {
         if (!attacker.isAttacking()) return;
 
         int attackW = (int) attackRadius;
@@ -26,8 +26,23 @@ public class AttackHitBox extends HitBox {
 
             target.takeDamage((int) attackValue);
             float kbDir = attacker.isFacingRight() ? 1 : -1;
-            target.applyKnockback(kbDir * (kbValue + target.getDamage() * 0.55f), -4);
+            target.applyKnockback(kbDir * (kbValue + target.getDamage() * 0.5f), -4);
             // attacker.stopAttacking();
+        }
+    }
+
+    public void checkHeavyAttackHit(Player attacker, Player target,
+                                    float attackRadius, float attackValue, float kb) {
+        if (!attacker.isHeavyAttacking()) return;
+
+        float attackX = attacker.isFacingRight() ? attacker.getRight() : attacker.getX() - attackRadius;
+        boolean hitsTarget = attackX < target.getRight() && attackX + attackRadius > target.getX()
+                && attacker.getY() < target.getBottom() && attacker.getBottom() > target.getY();
+        if (hitsTarget) {
+            target.takeDamage((int) attackValue);
+            int dir = attacker.isFacingRight() ? 1 : -1;
+            float scaling = kb + target.getDamage() * 0.8f;
+            target.applyKnockback(dir * scaling, -4f - target.getDamage() * 0.04f);
         }
     }
 }
