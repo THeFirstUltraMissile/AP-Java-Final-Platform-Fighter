@@ -10,6 +10,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import stages.ShibuyaStage;
 import stages.Stage;
 import stages.TestStage;
+import stages.TetrisStage;
 
 import java.util.ArrayList;
 
@@ -45,6 +46,7 @@ public class Game extends BasicGameState {
         Sounds.loadSounds();
         stages.add(new TestStage());
         stages.add(new ShibuyaStage());
+        stages.add(new TetrisStage());
     }
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
@@ -99,7 +101,7 @@ public class Game extends BasicGameState {
             rightPlayer.setX(rightPlayer.getX() + overlap / 2f);
         }
 
-        stages.get(stageInt).updateStage(player1, player2);
+        stages.get(StageSelect.stageChoice).updateStage(player1, player2);
 
         int screenH = Main.getScreenHeight();
         int screenW = Main.getScreenWidth();
@@ -115,7 +117,7 @@ public class Game extends BasicGameState {
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
-        stages.get(stageInt).renderStage(g);
+        stages.get(StageSelect.stageChoice).renderStage(g);
         combatUI(g);
 
         player1.draw(g);
@@ -184,13 +186,7 @@ public class Game extends BasicGameState {
             // XC and NM are special buttons, QE and UO are attack buttons
 
 
-            case Input.KEY_1:
-                stageInt = 0;
-                break;
 
-            case Input.KEY_2:
-                stageInt = 1;
-                break;
 
             case Input.KEY_W:
                 if (player1 != null) player1.jump();
@@ -240,7 +236,8 @@ public class Game extends BasicGameState {
     public void combatUI(Graphics g)
 	{
 	playerMarkers(g);
-	playerHealthIndicators(g);
+//	playerHealthIndicators(g);
+        // james re-did it because of course he did... don't have anything more important to do.
 	}
 	public void playerMarkers(Graphics g)
 	{
