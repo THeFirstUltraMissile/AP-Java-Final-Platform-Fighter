@@ -3,6 +3,8 @@ package core;
 import core.player.Gojo;
 import core.player.Player;
 import core.player.Sukuna;
+import core.projectile.Projectile;
+import core.projectile.TestProjectile;
 import hitboxes.AttackHitBox;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
@@ -29,10 +31,13 @@ public class Game extends BasicGameState {
 
     private int stageInt = 0;
 
-    Player player1;
-    Player player2;
+    public Player player1;
+    public Player player2;
+
 
     AttackHitBox attackHitBox = new AttackHitBox();
+
+    ArrayList<Projectile> projectiles = new ArrayList<>();
 
     private boolean gameOver = false;
     private String winner = "";
@@ -56,12 +61,19 @@ public class Game extends BasicGameState {
         player1.step();
         player2.step();
 
+        for(int i = 0; i < projectiles.size();i++)
+        {
+            projectiles.get(i).step();
+        }
+
         Input input = gc.getInput();
 
         if (input.isKeyDown(Input.KEY_A)) {
             player1.playerLeft();
+            player1.setFacingRight(false);
         } else if (input.isKeyDown(Input.KEY_D)) {
             player1.playerRight();
+            player1.setFacingRight(true);
         }
         if (input.isKeyDown(Input.KEY_S)) {
             player1.crouch();
@@ -71,8 +83,10 @@ public class Game extends BasicGameState {
 
         if (input.isKeyDown(Input.KEY_J)) {
             player2.playerLeft();
+            player2.setFacingRight(false);
         } else if (input.isKeyDown(Input.KEY_L)) {
             player2.playerRight();
+            player2.setFacingRight(true);
         }
         if (input.isKeyDown(Input.KEY_K)) {
             player2.crouch();
@@ -155,6 +169,11 @@ public class Game extends BasicGameState {
         player1.drawAttack(g);
         player2.drawAttack(g);
 
+        for(int i = 0; i < projectiles.size();i++)
+        {
+            projectiles.get(i).draw(g);
+        }
+
         drawIcons(g);
 
         if (gameOver) {
@@ -226,7 +245,7 @@ public class Game extends BasicGameState {
 
 
                 if(player1!=null&&!player1.getIsInAir()) player1.aerialAttack(35); //if in air do aerial else normie attack
-//                else {  if (player1 != null) player1.lightAttack(49); }
+                else {  if (player1 != null) player1.lightAttack(49); }
                 break;
 
             case Input.KEY_F:
@@ -243,7 +262,7 @@ public class Game extends BasicGameState {
             case Input.KEY_U:
 
                 if(player2!=null&&player2.getIsInAir()) player2.aerialAttack(35);
-//                else{   if (player2 != null) player2.lightAttack(49); }
+                else{   if (player2 != null) player2.lightAttack(49); }
 
                 break;
 
@@ -267,6 +286,10 @@ public class Game extends BasicGameState {
                     }
                 }
                 break;
+
+            case Input.KEY_T:
+                projectiles.add(new TestProjectile(player1.getX(),player1.getY(),32,32,32,15,0,15,15,player1.getFacing(),player1,player2));
+
 
             default:
         }
@@ -340,4 +363,14 @@ public class Game extends BasicGameState {
     
     public void mousePressed(int button, int x, int y) {
     }
+
+    public Player getPlayer1()
+    {
+        return player1;
+    }
+    public Player getPlayer2()
+    {
+        return player2;
+    }
+
 }

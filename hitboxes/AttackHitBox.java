@@ -26,8 +26,9 @@ public class AttackHitBox extends HitBox {
 
             target.takeDamage((int) attackValue);
             float kbDir = attacker.isFacingRight() ? 1 : -1;
-            target.applyKnockback(kbDir * (kbValue + target.getDamage() * 0.5f), -4);
+            target.applyKnockback(kbDir * (float) ((((target.getDamage()/10) + ((target.getDamage()*attackValue)/50))*kbValue)*0.85), -4);
             // attacker.stopAttacking();
+            System.out.println("hit");
         }
     }
 
@@ -41,7 +42,7 @@ public class AttackHitBox extends HitBox {
         if (hitsTarget) {
             target.takeDamage((int) attackValue);
             int dir = attacker.isFacingRight() ? 1 : -1;
-            float scaling = kb + target.getDamage() * 0.8f;
+            float scaling = (kb + target.getDamage()+50) * 0.8f;
             target.applyKnockback(dir * scaling, -4f - target.getDamage() * 0.04f);
         }
     }

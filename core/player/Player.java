@@ -19,6 +19,7 @@ public class Player {
     private double maxAccel;
     protected double accelMax;
     private double direction;
+    private int facing;
     private int jumpsRemaining = 2;
 
     private Color pink;
@@ -34,6 +35,9 @@ public class Player {
     private boolean lightAttack = false;
     private float attackValue;
 
+    private int iJames;
+    private boolean canBeHit = false;
+
     private boolean aerialAttack = false;
     public boolean isInAir = true;
 
@@ -46,6 +50,8 @@ public class Player {
         h = 128;
         baseHi = 128;
 
+        iJames = 6; //iJames
+
         horizontalSpeed = 0;
         verticalSpeed = 0;
         jumpHeight = 20;
@@ -55,13 +61,14 @@ public class Player {
         maxAccel = 0;
         accelMax = 7.5; //15 for a good time ;) -bryce typed ts james says
         direction = 0;
+        setFacing();
 
         pink = new Color(255, 0, 255);
     }
 
     public void step() {
         applyGravity();
-
+        setFacing();
         if (isMoving()) {
             if (maxAccel <= accelMax) {
                 maxAccel += accel;
@@ -90,6 +97,12 @@ public class Player {
             attackTimer--;
         } else {
             isAttacking = false;
+        }
+        if (iJames > 0) {
+            iJames--;
+        }
+        if (iJames == 0) {
+            canBeHit = true;
         }
     }
 
@@ -152,12 +165,23 @@ public class Player {
     public void stopAttacking() {
         isAttacking = false;
         heavyAttack = false;
-        aerialAttack =false;
+        aerialAttack = false;
         lightAttack = false;
         attackTimer = 0;
     }
 
     public void draw(Graphics g) {
+
+    }
+
+    public void setFacing()
+    {
+        if(isFacingRight()){
+            facing = 1;
+        }
+        else{
+            facing = -1;
+        }
 
     }
 
@@ -172,8 +196,7 @@ public class Player {
         if (grounded) jumpsRemaining = 2;
     }
 
-    public void setOnAir(boolean inAir)
-    {
+    public void setOnAir(boolean inAir) {
         isInAir = inAir;
     }
 
@@ -193,6 +216,10 @@ public class Player {
 
     protected boolean isMoving() {
         return direction != 0;
+    }
+    public int getDirection()
+    {
+        return (int) direction;
     }
 
     public boolean getIsInAir() {
@@ -252,15 +279,15 @@ public class Player {
     }
 
     public boolean isHeavyAttacking() {
-        return attackTimer > 0 && !lightAttack&&!aerialAttack;
+        return attackTimer > 0 && !lightAttack && !aerialAttack;
     }
 
     public boolean isLightAttacking() {
-        return attackTimer > 0 && !heavyAttack&&!aerialAttack;
+        return attackTimer > 0 && !heavyAttack && !aerialAttack;
     }
 
-    public boolean isAerialAttacking(){
-        return attackTimer > 0 && !heavyAttack&&lightAttack;
+    public boolean isAerialAttacking() {
+        return attackTimer > 0 && !heavyAttack && lightAttack;
     }
 
     public float getHeavyAttackValue() {
@@ -274,6 +301,10 @@ public class Player {
     public boolean isFacingRight() {
         return facingRight;
     }
+    public void setFacingRight(boolean bol)
+    {
+        facingRight = bol;
+    }
 
     public int getDamage() {
         return damageTaken;
@@ -283,8 +314,7 @@ public class Player {
         damageTaken += dmg;
     }
 
-    public void resetDamage()
-    {
+    public void resetDamage() {
         damageTaken = 0;
     }
 
@@ -305,5 +335,24 @@ public class Player {
         return 3;
     }
 
+    public int getFacing()
+    {
+        return facing;
+    }
 
+    public int getIFrames() {
+        return iJames;
+    }
+
+    public void setIFrames(int amount) {
+        iJames = amount;
+    }
+    public void ChangeCanBeHit(boolean status) {
+        canBeHit = status;
+    }
 }
+
+
+
+
+

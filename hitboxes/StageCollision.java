@@ -16,6 +16,12 @@ public class StageCollision extends Collision{
             if (player.getYAccel() >= 0) {
                 player.setY(stageY - player.getHeight());
                 player.setVerticalSpeed(0);
+                player.setOnGround(true);
+                player.isInAir =false;
+            }
+            else{
+                player.isInAir=true;
+                System.out.println("in air -- test --");
             }
         }
 
