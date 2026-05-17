@@ -43,7 +43,10 @@ public class Player {
 
     public int stocks = 2; //lives
 
-    public Player(int x, int y) {
+    private float ultCharge = 0;  //ultimate starts at 0 and goes to 100
+    private boolean hasUlt = false;
+
+    public Player(int x, int y,int facing) {
         this.x = x;
         this.y = y;
         w = 128;
@@ -61,7 +64,7 @@ public class Player {
         maxAccel = 0;
         accelMax = 7.5; //15 for a good time ;) -bryce typed ts james says
         direction = 0;
-        setFacing();
+        this.facing = facing;
 
         pink = new Color(255, 0, 255);
     }
@@ -349,6 +352,30 @@ public class Player {
     }
     public void ChangeCanBeHit(boolean status) {
         canBeHit = status;
+    }
+
+    public float getUltCharge()
+    {
+        return ultCharge;
+    }
+    public void updateUltCharge(float amt) //changes ult charge by amt and checks if ult is above max (100)
+    {
+        ultCharge += amt;
+        if(ultCharge >= 100)
+        {
+            ultCharge = 100;
+            hasUlt = true;
+        }
+
+    }
+    public boolean getUlt()
+    {
+        return hasUlt;
+    }
+    public void setHasUlt(boolean ult) //almost always will be used to set ult to false
+    {
+        hasUlt = ult;
+        ultCharge = 0;
     }
 }
 

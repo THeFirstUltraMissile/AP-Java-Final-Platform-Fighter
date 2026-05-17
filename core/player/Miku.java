@@ -11,8 +11,8 @@ public class Miku extends Player {
     private Animation attackAnim;
     private Animation currentAnim;
 
-    public Miku(int x, int y) throws SlickException {
-        super(x, y);
+    public Miku(int x, int y,int direction) throws SlickException {
+        super(x, y,direction);
         int jumpHeight = 12;
         float walkSpeed = 1.5f;
 

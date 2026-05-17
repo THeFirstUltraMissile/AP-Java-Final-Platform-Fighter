@@ -16,8 +16,8 @@ public class Sukuna extends Player {
     private boolean wasAerialAttacking = false;
     private boolean wasLightAttacking = false;
 
-    public Sukuna(int x, int y) throws SlickException {
-        super(x, y);
+    public Sukuna(int x, int y, int direction) throws SlickException {
+        super(x, y, direction);
         jumpHeight = 20;
         walkSpeed = 1.5;
 

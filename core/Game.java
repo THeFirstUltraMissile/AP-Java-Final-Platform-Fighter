@@ -5,6 +5,7 @@ import core.player.Player;
 import core.player.Sukuna;
 import core.projectile.Projectile;
 import core.projectile.TestProjectile;
+import core.ultimates.Ultimates;
 import hitboxes.AttackHitBox;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
@@ -38,6 +39,8 @@ public class Game extends BasicGameState {
     AttackHitBox attackHitBox = new AttackHitBox();
 
     ArrayList<Projectile> projectiles = new ArrayList<>();
+
+    Ultimates p1Ult;
 
     private boolean gameOver = false;
     private String winner = "";
@@ -95,19 +98,19 @@ public class Game extends BasicGameState {
         }
 
         attackHitBox.checkAttackHit(player1, player2,
-                player1.getAttackRadius(), player1.getAttackValue(), player1.getKbValue(), 0);
+                player1.getAttackRadius(), player1.getAttackValue(), player1.getKbValue(), 10);
 
         attackHitBox.checkAttackHit(player2, player1,
-                player2.getAttackRadius(), player2.getAttackValue(), player2.getKbValue(), 0); //light attack
+                player2.getAttackRadius(), player2.getAttackValue(), player2.getKbValue(), 10); //light attack
 
         attackHitBox.checkAttackHit(player1, player2,
-                30, 3, 2, 0);
+                30, 3, 2, 5);
         attackHitBox.checkAttackHit(player2, player1,
-                30, 3, 2, 0); //aerial attack, radius 30 atk = 3, kb = 2
+                30, 3, 2, 5); //aerial attack, radius 30 atk = 3, kb = 2
 
 
-        attackHitBox.checkHeavyAttackHit(player1, player2, player1.getAttackRadius() * 1.5f,player1.getHeavyAttackValue(), player1.getHeavyKbValue());
-        attackHitBox.checkHeavyAttackHit(player2, player1, player2.getAttackRadius() * 1.5f, player2.getHeavyAttackValue(), player2.getHeavyKbValue());
+        attackHitBox.checkHeavyAttackHit(player1, player2, player1.getAttackRadius() * 1.5f, player1.getHeavyAttackValue(), player1.getHeavyKbValue(),20);
+        attackHitBox.checkHeavyAttackHit(player2, player1, player2.getAttackRadius() * 1.5f, player2.getHeavyAttackValue(), player2.getHeavyKbValue(),20);
         //you can read (heavy attack)
 
 
@@ -156,6 +159,10 @@ public class Game extends BasicGameState {
                 resetPlayer(player2);
             }
         }
+        if(p1Ult!=null) {
+            p1Ult.update();
+        }
+
     }
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
@@ -187,6 +194,13 @@ public class Game extends BasicGameState {
                     Main.getScreenWidth() / 2f - 70,
                     Main.getScreenHeight() / 2f + 20);
         }
+
+        combatUI(g);
+
+        if(p1Ult!=null)
+        {
+            p1Ult.render(g);
+        }
     }
 
     private void drawIcons(Graphics g) {
@@ -207,10 +221,10 @@ public class Game extends BasicGameState {
         g.drawString(player2.getDamage() + "%", p2X + 90, 80);
     }
 
-    private Player buildPlayer(int charIndex, int x, int y) throws SlickException {
+    private Player buildPlayer(int charIndex, int x, int y,int direction) throws SlickException {
         switch (charIndex) {
-            case 1:  return new Gojo(x, y);
-            default: return new Sukuna(x, y);
+            case 1:  return new Gojo(x, y,direction);
+            default: return new Sukuna(x, y,direction);
         }
     }
 
@@ -219,8 +233,8 @@ public class Game extends BasicGameState {
         winner = "";
         p1CharIndex = CharacterSelect.p1Choice;
         p2CharIndex = CharacterSelect.p2Choice;
-        player1 = buildPlayer(p1CharIndex, (1920 / 3),     1080 / 2);
-        player2 = buildPlayer(p2CharIndex, (1920 * 2 / 3), 1080 / 2);
+        player1 = buildPlayer(p1CharIndex, (1920 / 3),     1080 / 2,1);
+        player2 = buildPlayer(p2CharIndex, (1920 * 2 / 3), 1080 / 2,-1);
     }
 
     public void leave(GameContainer gc, StateBasedGame sbg) {
@@ -233,6 +247,8 @@ public class Game extends BasicGameState {
             // Controls : W and I are jump, A and J are move left, D and L are move right,
             // XC and NM are special buttons, QE and UO are attack buttons
             // e and u are also aerials
+
+            //q and o will be for ults
 
             //player 1
 
@@ -252,6 +268,14 @@ public class Game extends BasicGameState {
                 if (player1 != null) player1.heavyAttack(70);
                 break;
 
+            case Input.KEY_Q:
+                    if(player1!=null) //&&player1.getUlt()
+                    {
+                        player1.setHasUlt(false); // resets the ult charge
+                        p1Ult = new Ultimates(player1,player2,player1.getX(),player1.getY()+25,35,20*player1.getFacing(),0,40,15);
+                        System.out.println("p1 ult");
+                    }
+                    break;
 
                 //player 2
 
@@ -262,12 +286,21 @@ public class Game extends BasicGameState {
             case Input.KEY_U:
 
                 if(player2!=null&&player2.getIsInAir()) player2.aerialAttack(35);
-                else{   if (player2 != null) player2.lightAttack(49); }
+                else{   if (player2 != null) { player2.lightAttack(49); } }
 
                 break;
 
             case Input.KEY_H:
                 if (player2 != null) player2.heavyAttack(70);
+                break;
+
+
+            case Input.KEY_O:
+                if(player2!=null&&player2.getUlt())
+                {
+                    player2.setHasUlt(false);
+                    player1.setX(10000);
+                }
                 break;
 
 
@@ -279,8 +312,8 @@ public class Game extends BasicGameState {
                     gameOver = false;
                     winner = "";
                     try {
-                        player1 = buildPlayer(p1CharIndex, 1920 / 4, 1080 / 2);
-                        player2 = buildPlayer(p2CharIndex, (1920 * 3 / 4)-25, 1080 / 2);
+                        player1 = buildPlayer(p1CharIndex, 1920 / 4, 1080 / 2,1);
+                        player2 = buildPlayer(p2CharIndex, (1920 * 3 / 4)-25, 1080 / 2,-1);
                     } catch (SlickException e) {
                         e.printStackTrace();
                     }
@@ -326,9 +359,17 @@ public class Game extends BasicGameState {
     public void combatUI(Graphics g)
 	{
 	playerMarkers(g);
-//	playerHealthIndicators(g);
-        // james re-did it because of course he did... don't have anything more important to do.
+    ultLabels(g);
 	}
+
+    public void ultLabels(Graphics g) //this would be so much quicker in godot
+    {
+        g.setColor(Color.white);
+        g.drawString(String.valueOf(player1.getUltCharge()),100,100);
+    }
+
+
+
 	public void playerMarkers(Graphics g)
 	{
 		 float middleX1 = player1.getX()+ (float) player1.getWidth() /2;

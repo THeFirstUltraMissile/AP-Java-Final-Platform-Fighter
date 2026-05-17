@@ -29,11 +29,12 @@ public class AttackHitBox extends HitBox {
             target.applyKnockback(kbDir * (float) ((((target.getDamage()/10) + ((target.getDamage()*attackValue)/50))*kbValue)*0.85), -4);
             // attacker.stopAttacking();
             System.out.println("hit");
+            attacker.updateUltCharge(specialValue);
         }
     }
 
     public void checkHeavyAttackHit(Player attacker, Player target,
-                                    float attackRadius, float attackValue, float kb) {
+                                    float attackRadius, float attackValue, float kb, float spValue) {
         if (!attacker.isHeavyAttacking()) return;
 
         float attackX = attacker.isFacingRight() ? attacker.getRight() : attacker.getX() - attackRadius;
@@ -44,6 +45,7 @@ public class AttackHitBox extends HitBox {
             int dir = attacker.isFacingRight() ? 1 : -1;
             float scaling = (kb + target.getDamage()+50) * 0.8f;
             target.applyKnockback(dir * scaling, -4f - target.getDamage() * 0.04f);
+            attacker.updateUltCharge(spValue);
         }
     }
 }

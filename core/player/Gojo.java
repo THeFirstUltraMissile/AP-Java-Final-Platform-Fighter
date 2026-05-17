@@ -17,8 +17,8 @@ public class Gojo extends Player {
     private boolean wasHeavyAttacking = false;
     private boolean wasAerialAttacking = false;
 
-    public Gojo(int x, int y) throws SlickException {
-        super(x, y);
+    public Gojo(int x, int y,int direction) throws SlickException {
+        super(x, y,direction);
         int jumpHeight = 22;
         double walkSpeed = 1.6;
 
