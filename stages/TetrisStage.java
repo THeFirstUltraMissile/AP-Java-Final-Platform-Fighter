@@ -8,18 +8,18 @@ import hitboxes.StageCollision;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
-public class TestStage extends Stage {
+public class TetrisStage extends Stage{
     StageCollision testCollision;
 
-    public TestStage() {
-        name = "test";
+    public TetrisStage() {
+        name = "Teris";
         song = Sounds.TestSong;
-        background = Images.shrineBackground;
+        background = Images.tetrisBackground;
 
 
-        width = Main.getScreenWidth();
+        width = (Main.getScreenWidth()/2)+75;
         height = Main.getScreenHeight() / 3;
-        x = 0;
+        x = (Main.getScreenHeight() / 3)+100;
         y = Main.getScreenHeight() - height;
 
         testCollision = new StageCollision();
@@ -30,9 +30,9 @@ public class TestStage extends Stage {
 
     public void renderStage(Graphics g) {
         testCollision.makeBox(g, x, y, width, height);
-        g.setColor(Color.green);
-        g.fillRect(x, y, width, height);
-        g.drawImage(background, 0, 0);
+        g.setColor(Color.blue);
+        g.drawRect(x, y, width, height);
+        g.drawImage(background, 0, 225);
 
 
     }
