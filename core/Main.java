@@ -12,6 +12,7 @@ public class Main extends StateBasedGame {
     public static final int CHAR_SELECT_ID = 0;
     public static final int STAGE_SELECT_ID = 1;
     public static final int GAME_ID = 2;
+    public static final int MENU_ID = 3;
 
     public Main(String name) {
         super(name);
@@ -30,7 +31,9 @@ public class Main extends StateBasedGame {
         addState(new CharacterSelect(CHAR_SELECT_ID));
         addState(new StageSelect(STAGE_SELECT_ID));
         addState(new Game(GAME_ID));
-        enterState(CHAR_SELECT_ID);
+        addState(new Menu(MENU_ID));
+        //enterState(CHAR_SELECT_ID);
+        enterState(MENU_ID);
     }
 
     public static void main(String[] args) {

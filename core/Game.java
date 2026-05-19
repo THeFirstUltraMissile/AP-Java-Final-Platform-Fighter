@@ -43,6 +43,7 @@ public class Game extends BasicGameState {
     Ultimates p1Ult;
 
     private boolean gameOver = false;
+    private boolean backToMenu = false;
     private String winner = "";
 
     private int p1CharIndex = 0;
@@ -60,6 +61,8 @@ public class Game extends BasicGameState {
 
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         if (gameOver) return;
+
+        if (backToMenu) { sbg.enterState(Main.CHAR_SELECT_ID); }
 
         player1.step();
         player2.step();
@@ -318,6 +321,10 @@ public class Game extends BasicGameState {
                         e.printStackTrace();
                     }
                 }
+                break;
+
+            case Input.KEY_ESCAPE:
+                backToMenu = true;
                 break;
 
             case Input.KEY_T:
