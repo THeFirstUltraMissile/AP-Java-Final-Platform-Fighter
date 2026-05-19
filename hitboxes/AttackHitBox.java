@@ -5,7 +5,7 @@ import core.player.Player;
 public class AttackHitBox extends HitBox {
 
     public void checkAttackHit(Player attacker, Player target, float attackRadius, float attackValue, float kbValue, float specialValue) {
-        if (!attacker.isAttacking()) return;
+        if (!attacker.isAttacking()&&!target.getCanBeHit()) return;
 
         int attackW = (int) attackRadius;
         int attackH = attacker.getHeight();
@@ -25,8 +25,10 @@ public class AttackHitBox extends HitBox {
                 isInBox(target.getRight(), target.getBottom(), (int)attackX, (int)attackY, attackW, attackH)) {
 
             target.takeDamage((int) attackValue);
+            target.setIFrames(target.getIJamesMax());
+            target.ChangeCanBeHit(false);
             float kbDir = attacker.isFacingRight() ? 1 : -1;
-            target.applyKnockback(kbDir * (float) ((((target.getDamage()/10) + ((target.getDamage()*attackValue)/50))*kbValue)*0.85), -4);
+            target.applyKnockback(kbDir * (float) ((((target.getDamage()/10) + ((target.getDamage()*attackValue)/50))*kbValue)*0.85), target.getDamage()+kbValue);
             // attacker.stopAttacking();
             System.out.println("hit");
             attacker.updateUltCharge(specialValue);

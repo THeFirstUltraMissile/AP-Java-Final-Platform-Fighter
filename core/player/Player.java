@@ -36,15 +36,26 @@ public class Player {
     private float attackValue;
 
     private int iJames;
+    private int iJamesMax;
     private boolean canBeHit = false;
 
     private boolean aerialAttack = false;
     public boolean isInAir = true;
 
+    private boolean specialAttack1 = false;
+    private boolean specialAttack2 = false;
+    private int specialTimer = 0;
+    private static final int SPECIAL_COOLDOWN_MAX = 15; // cant be doing what sukuna did in shibuya until NOW
+    private int specialCooldown = 0;
+
+
+
     public int stocks = 2; //lives
 
     private float ultCharge = 0;  //ultimate starts at 0 and goes to 100
     private boolean hasUlt = false;
+
+
 
     public Player(int x, int y,int facing) {
         this.x = x;
@@ -53,7 +64,8 @@ public class Player {
         h = 128;
         baseHi = 128;
 
-        iJames = 6; //iJames
+        iJamesMax = 12;
+        iJames = 54; //iFames  **NEW IJAMES 15 PRO MAX ULTRA LIGHT WEIGHT 670 HRTZ Screen for $iJames.99**
 
         horizontalSpeed = 0;
         verticalSpeed = 0;
@@ -67,6 +79,8 @@ public class Player {
         this.facing = facing;
 
         pink = new Color(255, 0, 255);
+
+
     }
 
     public void step() {
@@ -101,10 +115,22 @@ public class Player {
         } else {
             isAttacking = false;
         }
+
+        if (specialTimer > 0) {
+            specialTimer--;
+        } else {
+            specialAttack1 = false;
+            specialAttack2 = false;
+        }
+        if (specialCooldown > 0) {
+            specialCooldown--;
+        }
+
+
         if (iJames > 0) {
             iJames--;
         }
-        if (iJames == 0) {
+        if (iJames <= 0) {
             canBeHit = true;
         }
     }
@@ -172,6 +198,49 @@ public class Player {
         lightAttack = false;
         attackTimer = 0;
     }
+
+    public void specialAttack1(int duration) {
+        if (specialCooldown > 0 || specialTimer > 0) return;
+        specialAttack1 = true;
+        specialAttack2 = false;
+        specialTimer = duration;
+        specialCooldown = SPECIAL_COOLDOWN_MAX;
+    }
+
+
+    public void specialAttack2(int duration) {
+        if (specialCooldown > 0 || specialTimer > 0) return;
+        specialAttack2 = true;
+        specialAttack1 = false;
+        specialTimer = duration;
+        specialCooldown = SPECIAL_COOLDOWN_MAX;
+    }
+
+    public boolean isSpecialAttacking1() {
+        return specialAttack1 && specialTimer > 0;
+    }
+
+    public boolean isSpecialAttacking2() {
+        return specialAttack2 && specialTimer > 0;
+    }
+
+    public boolean isDoingSpecial() {
+        return 4 > 0;
+    }
+
+    public int getSpecialTimer() {
+        return specialTimer;
+    }
+
+    public int getSpecialCooldown() {
+        return specialCooldown;
+    }
+
+
+    public void drawSpecial(Graphics g) {
+    }
+
+
 
     public void draw(Graphics g) {
 
@@ -343,9 +412,11 @@ public class Player {
         return facing;
     }
 
-    public int getIFrames() {
+    public int getIJames() {
         return iJames;
     }
+
+    public int getIJamesMax() { return iJamesMax;}
 
     public void setIFrames(int amount) {
         iJames = amount;
@@ -353,6 +424,7 @@ public class Player {
     public void ChangeCanBeHit(boolean status) {
         canBeHit = status;
     }
+    public boolean getCanBeHit(){return canBeHit;}
 
     public float getUltCharge()
     {
@@ -377,6 +449,14 @@ public class Player {
         hasUlt = ult;
         ultCharge = 0;
     }
+
+    public int getJumpsRemaining() {
+        return jumpsRemaining;
+    }
+    public boolean isWalking() {
+        return !isInAir && isMoving();
+    }
+
 }
 
 

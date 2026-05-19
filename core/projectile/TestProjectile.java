@@ -1,11 +1,13 @@
 package core.projectile;
 
 import core.player.Player;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 public class TestProjectile extends Projectile{
     float x;
     float y;
+    float r;
     float pxSpeed; //projectile x speed
     float pySpeed;
     float dmg;
@@ -33,7 +35,11 @@ public class TestProjectile extends Projectile{
 
     }
     public void draw(Graphics g) {
-        g.drawOval(x,y,25,25);
+        g.drawOval(x,y,r,r);
+        g.setColor(Color.red);
+        g.drawRect(target.getX(), target.getY(), target.getWidth(), target.getHeight());
+        g.drawRect(x,y,r,r);
+
     }
     public void step()
     {
@@ -41,7 +47,6 @@ public class TestProjectile extends Projectile{
         x += pxSpeed * direction;
         y += pySpeed * direction;
 
-        attackHitBox.checkAttackHit(owner,target,r,dmg,kb,0);
         checkHit(target);
     }
 }

@@ -22,6 +22,7 @@ public class Ultimates {
     protected float dmg;
     protected float kb;
 
+    protected float duration;
 
 
     public Ultimates(Player p,Player target,float x, float y,float r ,float xSpeed, float ySpeed, float damage, float kb)
@@ -44,36 +45,39 @@ public class Ultimates {
         //other var
 
         kbDir = target.getFacing() * -1; //flips direction
-
+        duration = 180;
 
     }
 
     public void update()
     {
-       x+=xSpeed;
-       y+=ySpeed;
+        if(duration()) {
+            x += xSpeed;
+            y += ySpeed;
 
-       if(isOver())
-       {
-           target.takeDamage((int)(dmg));
-           target.applyKnockback(kbX(),-5);
-           System.out.println("ULT HIT!");
-           System.out.println(kbX());
-       }
+            if (isOver()) {
+                target.takeDamage((int) (dmg));
+                target.applyKnockback(kbX(), -5);
+                System.out.println("ULT HIT!");
+                System.out.println(kbX());
+            }
 
-
+            duration--;
+        }
     }
 
     public void render(Graphics g)
     {
+        if(duration()){
         g.drawOval(x,y,r,r);
         g.setColor(Color.red);
         g.drawRect(target.getX(), target.getY(), target.getWidth(), target.getHeight());
         g.drawRect(x,y,r,r);
-    }
+    }}
 
     public boolean isOver()
     {
+
         if(       x >= target.getX()
                 &&x+r <= target.getX()+target.getWidth()
                 &&y>=target.getY()
@@ -90,4 +94,9 @@ public class Ultimates {
         System.out.println("kb"+kb);
         System.out.println("hp"+target.getDamage());
    return (xSpeed *( dmg * kb*(target.getDamage()+1))/2500)-46.8f;}
+
+    public boolean duration()
+    {
+        return duration >= 0;
+    }
 }
