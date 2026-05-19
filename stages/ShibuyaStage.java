@@ -9,31 +9,38 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 public class ShibuyaStage extends Stage {
-    StageCollision collision;
+    StageCollision collision1;
+    StageCollision collision2;
 
     public ShibuyaStage() {
-        name = "Shibuya";
+        name = "Conflicting Evils";
         song = Sounds.TestSong;
-        background = Images.blankBackground;
+        background = Images.terraBackground;
 
         width = Main.getScreenWidth();
-        height = Main.getScreenHeight() / 8;
+        height = (Main.getScreenHeight() / 4)+30;
         x = 0;
         y = Main.getScreenHeight() - height;
 
-        collision = new StageCollision();
+        collision1 = new StageCollision();
+        collision2 = new StageCollision();
     }
 
     public void renderStage(Graphics g) {
-        g.setColor(new Color(30, 30, 60));
-        g.fillRect(0, 0, Main.getScreenWidth(), Main.getScreenHeight());
-        g.setColor(new Color(100, 100, 160));
-        g.fillRect(x, y, width, height);
+       g.drawImage(background,0,0);
+
+        g.drawRect(x,y,780,height);
+       g.drawRect(1140,y,Main.getScreenWidth()-1140,height);
+
     }
 
     public void updateStage(Player p1, Player p2) {
-        collision.collisionChecks(p1, x, y, width, height);
-        collision.collisionChecks(p2, x, y, width, height);
+        collision1.collisionChecks(p1, x, y, 780, height);
+        collision1.collisionChecks(p2, x, y, 780, height);
+
+        collision2.collisionChecks(p1,1140,y,Main.getScreenWidth()-1140,height);
+        collision2.collisionChecks(p2,1140,y,Main.getScreenWidth()-1140,height);
+
     }
 
     public void playSong() {
