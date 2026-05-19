@@ -13,11 +13,11 @@ public class StageSelect extends BasicGameState {
     public static int stageChoice = 0;
 
     private static final int NUM_STAGES = 3;
-    private static final String[] STAGE_NAMES  = { "Malfunctioning Shrine", "Tetris Omega","Shibuya Station Aftermath" };
+    private static final String[] STAGE_NAMES  = { "Malfunctioning Shrine", "Tetris Omega","Conflicting Evils" };
     private static final String[] STAGE_DESC   = {
             "Sukuna cast his Domain Expansion, Malevolent Shrine, but due to the brain damage he had acquired not long ago, his Shrine won't obey his commands..",
             "The blocky stage of the arena is made of the fallen brethren of the unknown fighter, yet to be seen..",
-            "The Shibuya Incident in it's glory, at floor B5 right when the Cursed Spirit Mahito arrived at 8:51 PM"
+            "The underground's internal conflict between the two world evils, The world slowly splitting in two."
 
 
     };
@@ -32,7 +32,7 @@ public class StageSelect extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         stagePreviews = new Image[NUM_STAGES];
         stagePreviews[0] = new Image("media/sprites/stages/stage_malfunctioningshrine.png");
-        stagePreviews[2] = new Image("media/blankBackground.png");
+        stagePreviews[2] = new Image("media/sprites/stages/terrariaStage.png");
         stagePreviews[1] = new Image("media/sprites/stages/stage_tetris2x.png");
     }
 

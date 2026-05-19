@@ -55,24 +55,26 @@ public abstract class Projectile {
 
     public abstract void draw(Graphics g);
 
-    public boolean checkHit(Player target) {
-        if (!active) return false;
+    public void checkHit(Player target) {
 
-        boolean hits =
-                getRight() > target.getX() &&
-                        x < target.getRight() &&
-                        getBottom() > target.getY() &&
-                        y < target.getBottom();
-
-        if (hits) {
-            // Similar logic to AttackHitBox, do NOT remove -1 for now.
+        if (isOver()) {
+            System.out.println("hit!");
             target.takeDamage((int) damage);
-            float kbDir = speedX >= 0 ? 1 : -1;
-            target.applyKnockback((float) (kbDir * (knockback + target.getDamage() * 0.5f)), -4);
+            target.applyKnockback((float) (speedX * (knockback + target.getDamage() * 0.5f)), -4);
             deactivate();
         }
 
-        return hits;
+    }
+    public boolean isOver()
+    {
+        if(       x-r >= target.getX()
+                &&x+r <= target.getX()+target.getWidth()
+                &&y-r>=target.getY()
+                &&y+r<=target.getY()+target.getHeight())
+        {
+            return true;
+        }
+        return false;
     }
 
 

@@ -1,10 +1,6 @@
 package core.player;
 
-import org.newdawn.slick.Animation;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.*;
 
 public class Gojo extends Player {
 
@@ -18,37 +14,40 @@ public class Gojo extends Player {
     private boolean wasHeavyAttacking = false;
     private boolean wasAerialAttacking = false;
 
-    // you are my specials are infinity and blu
-    // spoiler you can pull off a manga technique with special 2 and heavy attack
     private float blueOrbX, blueOrbY;
     private boolean blueOrbActive = false;
 
-    public Gojo(int x, int y, int direction) throws SlickException {
-        super(x, y, direction);
+    public Gojo(int x, int y,int direction) throws SlickException {
+        super(x, y,direction);
         int jumpHeight = 22;
         double walkSpeed = 1.6;
 
+
         SpriteSheet idleSheet = new SpriteSheet(
                 "media/sprites/kaisen/gojosatoru/assets_gojosatoru/satoru.png", 670, 670);
+
         SpriteSheet lightAttackSheet = new SpriteSheet(
                 "media/sprites/unused/stone.png", 128, 128);
+
         SpriteSheet aerialAttackSheet = new SpriteSheet(
-                "media/sprites/kaisen/ryomensukuna/basic/sukuna_jab2.png", 128, 128);
-        SpriteSheet heavySheet = new SpriteSheet(
-                "media/sprites/kaisen/gojosatoru/basic/gojo_smash.png", 256, 256);
+        "media/sprites/kaisen/ryomensukuna/basic/sukuna_jab2.png",128,128); //temp
+
+        SpriteSheet heavySheet = new SpriteSheet("media/sprites/kaisen/gojosatoru/basic/gojo_smash.png", 256, 256);
 
         idleAnim = new Animation(idleSheet, 150);
+
         lightAttackAnim = new Animation(lightAttackSheet, 60);
         lightAttackAnim.setLooping(false);
+
         heavyAttackAnim = new Animation(heavySheet, 60);
         heavyAttackAnim.setLooping(false);
-        aerialAttackAnim = new Animation(aerialAttackSheet, 60);
+
+        aerialAttackAnim = new Animation(aerialAttackSheet,60);
         aerialAttackAnim.setLooping(false);
 
         currentAnim = idleAnim;
     }
 
-    // most broken ability in jjk
     @Override
     public void specialAttack1(int duration) {
         super.specialAttack1(45);
@@ -75,10 +74,12 @@ public class Gojo extends Player {
         } else if (isLightAttacking()) {
             if (!wasLightAttacking) lightAttackAnim.restart();
             currentAnim = lightAttackAnim;
-        } else if (isAerialAttacking()) {
-            if (!wasAerialAttacking) aerialAttackAnim.restart();
-            currentAnim = aerialAttackAnim;
-        } else {
+        }
+            else if (isAerialAttacking()) {
+                if(!wasAerialAttacking) aerialAttackAnim.restart();
+                currentAnim = aerialAttackAnim;
+            }
+         else {
             currentAnim = idleAnim;
         }
 
@@ -92,6 +93,7 @@ public class Gojo extends Player {
             blueOrbX += isFacingRight() ? 15 : -15;
         }
         if (!isSpecialAttacking2()) blueOrbActive = false;
+
     }
 
     @Override
@@ -102,22 +104,19 @@ public class Gojo extends Player {
         } else {
             bodyFrame.draw(getX() + getWidth(), getY(), -getWidth(), getHeight());
         }
-    }
 
-    @Override
+    }
     public void drawAttack(Graphics g) {
         if (!isAttacking()) return;
-        Animation attackAnim = isHeavyAttacking() ? heavyAttackAnim
-                : isLightAttacking() ? lightAttackAnim
-                  : aerialAttackAnim;
+        Animation attackAnim = isHeavyAttacking() ? heavyAttackAnim : isLightAttacking() ? lightAttackAnim : aerialAttackAnim ;
         org.newdawn.slick.Image frame = attackAnim.getCurrentFrame();
         if (isFacingRight()) {
             frame.draw(getX() + getWidth(), getY(), getWidth(), getHeight());
         } else {
             frame.draw(getX(), getY(), -getWidth(), getHeight());
         }
-    }
 
+    }
     @Override
     public void drawSpecial(Graphics g) {
         // yeah this is NOT an image yet

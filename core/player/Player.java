@@ -36,44 +36,51 @@ public class Player {
     private float attackValue;
 
     private int iJames;
+    private int iJamesMax;
     private boolean canBeHit = false;
 
     private boolean aerialAttack = false;
     public boolean isInAir = true;
 
-    //yu are my SPECIALZ
     private boolean specialAttack1 = false;
     private boolean specialAttack2 = false;
     private int specialTimer = 0;
     private static final int SPECIAL_COOLDOWN_MAX = 15; // cant be doing what sukuna did in shibuya until NOW
     private int specialCooldown = 0;
 
+
+
     public int stocks = 2; //lives
 
     private float ultCharge = 0;  //ultimate starts at 0 and goes to 100
     private boolean hasUlt = false;
 
-    public Player(int x, int y, int facing) {
+
+
+    public Player(int x, int y,int facing) {
         this.x = x;
         this.y = y;
         w = 128;
         h = 128;
         baseHi = 128;
 
-        iJames = 6; //iJames ... what the fuck do you mean "iJames" like who wrote this. - James
+        iJamesMax = 12;
+        iJames = 54; //iFames  **NEW IJAMES 15 PRO MAX ULTRA LIGHT WEIGHT 670 HRTZ Screen for $iJames.99**
 
         horizontalSpeed = 0;
         verticalSpeed = 0;
-        jumpHeight = 32;
+        jumpHeight = 20;
         gravityValue = 0.75;
         walkSpeed = 1.25;
         accel = 0.8;
         maxAccel = 0;
-        accelMax = 16;
+        accelMax = 7.5; //15 for a good time ;) -bryce typed ts james says
         direction = 0;
         this.facing = facing;
 
         pink = new Color(255, 0, 255);
+
+
     }
 
     public void step() {
@@ -118,10 +125,12 @@ public class Player {
         if (specialCooldown > 0) {
             specialCooldown--;
         }
+
+
         if (iJames > 0) {
             iJames--;
         }
-        if (iJames == 0) {
+        if (iJames <= 0) {
             canBeHit = true;
         }
     }
@@ -182,7 +191,14 @@ public class Player {
     public void drawAttack(Graphics g) {
     }
 
-    // subclass override until stopattacking()
+    public void stopAttacking() {
+        isAttacking = false;
+        heavyAttack = false;
+        aerialAttack = false;
+        lightAttack = false;
+        attackTimer = 0;
+    }
+
     public void specialAttack1(int duration) {
         if (specialCooldown > 0 || specialTimer > 0) return;
         specialAttack1 = true;
@@ -224,22 +240,18 @@ public class Player {
     public void drawSpecial(Graphics g) {
     }
 
-    public void stopAttacking() {
-        isAttacking = false;
-        heavyAttack = false;
-        aerialAttack = false;
-        lightAttack = false;
-        attackTimer = 0;
-    }
+
 
     public void draw(Graphics g) {
 
     }
 
-    public void setFacing() {
-        if (isFacingRight()) {
+    public void setFacing()
+    {
+        if(isFacingRight()){
             facing = 1;
-        } else {
+        }
+        else{
             facing = -1;
         }
 
@@ -254,10 +266,6 @@ public class Player {
 
     public void setOnGround(boolean grounded) {
         if (grounded) jumpsRemaining = 2;
-    }
-
-    public int getJumpsRemaining() {
-        return jumpsRemaining;
     }
 
     public void setOnAir(boolean inAir) {
@@ -281,12 +289,8 @@ public class Player {
     protected boolean isMoving() {
         return direction != 0;
     }
-
-    public boolean isWalking() {
-        return !isInAir && isMoving();
-    }
-
-    public int getDirection() {
+    public int getDirection()
+    {
         return (int) direction;
     }
 
@@ -369,8 +373,8 @@ public class Player {
     public boolean isFacingRight() {
         return facingRight;
     }
-
-    public void setFacingRight(boolean bol) {
+    public void setFacingRight(boolean bol)
+    {
         facingRight = bol;
     }
 
@@ -403,45 +407,56 @@ public class Player {
         return 3;
     }
 
-    public int getFacing() {
+    public int getFacing()
+    {
         return facing;
     }
 
-    public int getIFrames() {
+    public int getIJames() {
         return iJames;
     }
+
+    public int getIJamesMax() { return iJamesMax;}
 
     public void setIFrames(int amount) {
         iJames = amount;
     }
-
     public void ChangeCanBeHit(boolean status) {
         canBeHit = status;
     }
+    public boolean getCanBeHit(){return canBeHit;}
 
-    public float getUltCharge() {
+    public float getUltCharge()
+    {
         return ultCharge;
     }
-
     public void updateUltCharge(float amt) //changes ult charge by amt and checks if ult is above max (100)
     {
         ultCharge += amt;
-        if (ultCharge >= 100) {
+        if(ultCharge >= 100)
+        {
             ultCharge = 100;
             hasUlt = true;
         }
 
     }
-
-    public boolean getUlt() {
+    public boolean getUlt()
+    {
         return hasUlt;
     }
-
     public void setHasUlt(boolean ult) //almost always will be used to set ult to false
     {
         hasUlt = ult;
         ultCharge = 0;
     }
+
+    public int getJumpsRemaining() {
+        return jumpsRemaining;
+    }
+    public boolean isWalking() {
+        return !isInAir && isMoving();
+    }
+
 }
 
 

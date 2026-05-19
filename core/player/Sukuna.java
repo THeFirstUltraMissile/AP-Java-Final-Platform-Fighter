@@ -1,17 +1,18 @@
 package core.player;
 
-import org.newdawn.slick.Animation;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.*;
 
 public class Sukuna extends Player {
 
-    private Animation idleAnim, lightAttackAnim, aerialAttackAnim, heavyAttackAnim, currentAnim;
-    private boolean wasHeavyAttacking, wasAerialAttacking, wasLightAttacking;
+    private Animation idleAnim;
+    private Animation lightAttackAnim;
+    private Animation currentAnim;
+    private Animation aerialAttackAnim;
+    private Animation heavyAttackAnim;
+    private boolean wasHeavyAttacking = false;
+    private boolean wasAerialAttacking = false;
+    private boolean wasLightAttacking = false;
 
-    // specials are the finger bearer cooker and the jane juliet blender
     private float dismantleX;
     private boolean dismantleActive = false;
 
@@ -20,16 +21,29 @@ public class Sukuna extends Player {
         jumpHeight = 20;
         walkSpeed = 1.5;
 
-        idleAnim = new Animation(new SpriteSheet("media/sprites/kaisen/ryomensukuna/assets/thukuna.png", 645, 645), 150);
+        // 1 frame 645
+        SpriteSheet idleSheet = new SpriteSheet(
+                "media/sprites/kaisen/ryomensukuna/assets/thukuna.png", 645, 645);
 
-        lightAttackAnim = new Animation(new SpriteSheet("media/sprites/kaisen/ryomensukuna/basic/sukuna_jab.png", 128, 128), 60);
+        // 13 frames
+        SpriteSheet lightAttackSheet = new SpriteSheet(
+                "media/sprites/kaisen/ryomensukuna/basic/sukuna_jab.png", 128, 128);
+
+        SpriteSheet aerialAttackSheet = new SpriteSheet(
+                "media/sprites/kaisen/ryomensukuna/basic/sukuna_jab2.png",128,128); //temp
+
+        SpriteSheet heavySheet = new SpriteSheet("media/sprites/kaisen/ryomensukuna/shrine/dismantle/sukuna_dismantleimpact.png", 256, 256);
+
+        idleAnim = new Animation(idleSheet, 150);
+
+        heavyAttackAnim = new Animation(heavySheet, 60);
+        heavyAttackAnim.setLooping(false);
+
+        lightAttackAnim = new Animation(lightAttackSheet, 60);
         lightAttackAnim.setLooping(false);
 
-        aerialAttackAnim = new Animation(new SpriteSheet("media/sprites/kaisen/ryomensukuna/basic/sukuna_jab2.png", 128, 128), 60);
+        aerialAttackAnim = new Animation(aerialAttackSheet,60);
         aerialAttackAnim.setLooping(false);
-
-        heavyAttackAnim = new Animation(new SpriteSheet("media/sprites/kaisen/ryomensukuna/shrine/dismantle/sukuna_dismantleimpact.png", 256, 256), 60);
-        heavyAttackAnim.setLooping(false);
 
         currentAnim = idleAnim;
     }
@@ -48,6 +62,7 @@ public class Sukuna extends Player {
         dismantleActive = true;
     }
 
+
     @Override
     public void step() {
         super.step();
@@ -55,13 +70,16 @@ public class Sukuna extends Player {
         if (isHeavyAttacking()) {
             if (!wasHeavyAttacking) heavyAttackAnim.restart();
             currentAnim = heavyAttackAnim;
-        } else if (isAerialAttacking()) {
+        }
+        else if (isAerialAttacking()) {
             if (!wasAerialAttacking) aerialAttackAnim.restart();
             currentAnim = aerialAttackAnim;
-        } else if (isLightAttacking()) {
+        }
+        else if (isLightAttacking()) {
             if (!wasLightAttacking) lightAttackAnim.restart();
             currentAnim = lightAttackAnim;
-        } else {
+        }
+        else {
             currentAnim = idleAnim;
         }
 
@@ -77,18 +95,24 @@ public class Sukuna extends Player {
 
     @Override
     public void draw(Graphics g) {
-        org.newdawn.slick.Image frame = idleAnim.getCurrentFrame();
-        if (isFacingRight()) frame.draw(getX(), getY(), getWidth(), getHeight());
-        else frame.draw(getX() + getWidth(), getY(), -getWidth(), getHeight());
+        org.newdawn.slick.Image bodyFrame = idleAnim.getCurrentFrame();
+        if (isFacingRight()) {
+            bodyFrame.draw(getX(), getY(), getWidth(), getHeight());
+        } else {
+            bodyFrame.draw(getX() + getWidth(), getY(), -getWidth(), getHeight());
+        }
+
     }
 
-    @Override
     public void drawAttack(Graphics g) {
         if (!isAttacking()) return;
-        Animation anim = isHeavyAttacking() ? heavyAttackAnim : isLightAttacking() ? lightAttackAnim : aerialAttackAnim;
-        org.newdawn.slick.Image frame = anim.getCurrentFrame();
-        if (isFacingRight()) frame.draw(getX() + getWidth(), getY(), getWidth(), getHeight());
-        else frame.draw(getX(), getY(), -getWidth(), getHeight());
+        Animation attackAnim = isHeavyAttacking() ? heavyAttackAnim : isLightAttacking() ? lightAttackAnim : aerialAttackAnim ;
+        org.newdawn.slick.Image frame = attackAnim.getCurrentFrame();
+        if (isFacingRight()) {
+            frame.draw(getX() + getWidth(), getY(), getWidth(), getHeight());
+        } else {
+            frame.draw(getX(), getY(), -getWidth(), getHeight());
+        }
     }
 
     @Override
@@ -124,6 +148,7 @@ public class Sukuna extends Player {
         if (!dismantleActive || !isSpecialAttacking2()) return null;
         return new float[]{dismantleX - 8, getY(), 20, getHeight()};
     }
+
 
     @Override
     public float getAttackRadius() {

@@ -5,8 +5,9 @@ import core.player.Player;
 import core.player.Sukuna;
 import core.projectile.Projectile;
 import core.projectile.TestProjectile;
+import core.ultimates.Cleave;
+import core.ultimates.HollowPurple;
 import core.ultimates.Ultimates;
-import core.ParticleSystem;
 import hitboxes.AttackHitBox;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
@@ -50,6 +51,7 @@ public class Game extends BasicGameState {
     private int p2PrevJumps = 2;
 
     Ultimates p1Ult;
+    Ultimates p2Ult;
 
     private boolean gameOver = false;
     private String winner = "";
@@ -171,6 +173,9 @@ public class Game extends BasicGameState {
         if(p1Ult!=null) {
             p1Ult.update();
         }
+        if(p2Ult!=null) {
+            p2Ult.update();
+        }
 
         //ticles and dust
         p1Particles.update();
@@ -178,11 +183,11 @@ public class Game extends BasicGameState {
 
         if (player1.isWalking()) {
             p1Particles.emitWalkDust(player1.getX() + player1.getWidth() / 2f,
-                                     player1.getBottom(), player1.isFacingRight());
+                    player1.getBottom(), player1.isFacingRight());
         }
         if (player2.isWalking()) {
             p2Particles.emitWalkDust(player2.getX() + player2.getWidth() / 2f,
-                                     player2.getBottom(), player2.isFacingRight());
+                    player2.getBottom(), player2.isFacingRight());
         }
 
         // jumps
@@ -193,7 +198,7 @@ public class Game extends BasicGameState {
                 p1Particles.emitJumpBurst(player1.getX() + player1.getWidth() / 2f, player1.getBottom());
             } else {
                 p1Particles.emitDoubleJump(player1.getX() + player1.getWidth() / 2f,
-                                           player1.getY() + player1.getHeight() / 2f);
+                        player1.getY() + player1.getHeight() / 2f);
             }
         }
         if (p2Jumps < p2PrevJumps) {
@@ -201,7 +206,7 @@ public class Game extends BasicGameState {
                 p2Particles.emitJumpBurst(player2.getX() + player2.getWidth() / 2f, player2.getBottom());
             } else {
                 p2Particles.emitDoubleJump(player2.getX() + player2.getWidth() / 2f,
-                                           player2.getY() + player2.getHeight() / 2f);
+                        player2.getY() + player2.getHeight() / 2f);
             }
         }
         p1PrevJumps = p1Jumps;
@@ -210,6 +215,7 @@ public class Game extends BasicGameState {
 
         checkSpecialHits(player1, player2);
         checkSpecialHits(player2, player1);
+
 
     }
 
@@ -254,6 +260,10 @@ public class Game extends BasicGameState {
         if(p1Ult!=null)
         {
             p1Ult.render(g);
+        }
+        if(p2Ult!=null)
+        {
+            p2Ult.render(g);
         }
     }
 
@@ -324,7 +334,6 @@ public class Game extends BasicGameState {
                 if (player1 != null) player1.heavyAttack(70);
                 break;
 
-
             case Input.KEY_X:
                 if (player1 != null) player1.specialAttack1(45);
                 break;
@@ -334,10 +343,16 @@ public class Game extends BasicGameState {
                 break;
 
             case Input.KEY_Q:
-                    if(player1!=null) //&&player1.getUlt()
+                    if(player1!=null&&player1.getUlt()) //
                     {
                         player1.setHasUlt(false); // resets the ult charge
-                        p1Ult = new Ultimates(player1,player2,player1.getX(),player1.getY()+25,35,20*player1.getFacing(),0,40,15);
+
+                        try {
+                            makeUlt(player1,player2,player1.getX(),player1.getY(),1028,30,0,40,30);
+                        } catch (SlickException e) {
+                            throw new RuntimeException(e);
+                        }
+
                         System.out.println("p1 ult");
                     }
                     break;
@@ -359,7 +374,6 @@ public class Game extends BasicGameState {
                 if (player2 != null) player2.heavyAttack(70);
                 break;
 
-
             case Input.KEY_N:
                 if (player2 != null) player2.specialAttack1(45);
                 break;
@@ -368,12 +382,15 @@ public class Game extends BasicGameState {
                 if (player2 != null) player2.specialAttack2(60);
                 break;
 
-
             case Input.KEY_O:
-                if(player2!=null&&player2.getUlt())
+                if(player2!=null&&player2.getUlt())//
                 {
                     player2.setHasUlt(false);
-                    player1.setX(10000);
+                    try {
+                        makeUlt(player2,player1,player2.getX(),player2.getY(),256,10,0,40,15);
+                    } catch (SlickException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 break;
 
@@ -394,8 +411,8 @@ public class Game extends BasicGameState {
                 }
                 break;
 
-            case Input.KEY_T:
-                projectiles.add(new TestProjectile(player1.getX(),player1.getY(),32,32,32,15,0,15,15,player1.getFacing(),player1,player2));
+//            case Input.KEY_T:
+//                projectiles.add(new TestProjectile(player1.getX(),player1.getY(),32,32,32,15,0,15,15,player1.getFacing(),player1,player2));
 
 
             default:
@@ -409,11 +426,15 @@ public class Game extends BasicGameState {
         {
             p.setX(1920 / 4);
             p1PrevJumps = 2;
+            p.setIFrames(54);
+            p.ChangeCanBeHit(false);
         }
         if(p == player2)
         {
             p.setX((1920 * 3 / 4)-25);
             p2PrevJumps = 2;
+            p.setIFrames(54);
+            p.ChangeCanBeHit(false);
         }
         p.setY(1080 / 2);
     }
@@ -504,6 +525,33 @@ public class Game extends BasicGameState {
         }
     }
 
+    public void makeUlt(Player p,Player target,float x, float y,float r ,float xSpeed, float ySpeed, float damage, float kb) throws SlickException {
+        System.out.println(p);
+
+        if((p == player1) && (p.getClass() == Sukuna.class))
+        {
+           p1Ult = new Cleave(p,target,x,y,512,0,0,40,40);
+            System.out.println("p1 cleave");
+        }
+        else if (p == player2&&p.getClass() == Sukuna.class)
+        {
+            p2Ult = new Cleave(p,target,x,y,512,0,0,40,40);
+            System.out.println("p2 cleave");
+        } else if (p == player1 && p.getClass() == Gojo.class) {
+            p1Ult = new HollowPurple(p,target,x,y,r,xSpeed,ySpeed,damage,kb);
+            System.out.println(" p1 p");
+        } else if (p == player2 && p.getClass() == Gojo.class) {
+            p2Ult = new HollowPurple(p,target,x,y,r,xSpeed,ySpeed,damage,kb);
+            System.out.println("p2 p");
+        }
+        else {
+            System.out.println("method failed");
+        }
+
+
+    }
+
+
     public void combatUI(Graphics g)
 	{
 	playerMarkers(g);
@@ -513,7 +561,8 @@ public class Game extends BasicGameState {
     public void ultLabels(Graphics g) //this would be so much quicker in godot
     {
         g.setColor(Color.white);
-        g.drawString(String.valueOf(player1.getUltCharge()),100,100);
+        g.drawString(String.valueOf("Ult percent: "+player1.getUltCharge()),25,125);
+        g.drawString(String.valueOf("Ult percent: "+player2.getUltCharge()),Main.getScreenWidth()-225,125);
     }
 
 
