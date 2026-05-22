@@ -598,6 +598,14 @@ public class Game extends BasicGameState {
 		g.drawString(String.valueOf(player2.getDamage()),x2+64,1040);
 	}
 
+    private void drawStocks(Graphics g) {
+        //Change this later to hearts or player icon maybe
+        //player 1
+        g.drawString(Integer.toString(player1.getStocks()), Images.gojoIcon.getWidth()/4, 100);
+        //player 2
+        g.drawString(Integer.toString(player2.getStocks()), Main.getScreenWidth()-100, 100);
+    }
+
     
     public void mousePressed(int button, int x, int y) {
     }

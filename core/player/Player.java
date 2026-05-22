@@ -456,6 +456,7 @@ public class Player {
     public boolean isWalking() {
         return !isInAir && isMoving();
     }
+    public int getStocks(){ return stocks; }
 
 }
 
