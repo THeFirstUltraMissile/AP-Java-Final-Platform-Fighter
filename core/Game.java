@@ -31,6 +31,7 @@ public class Game extends BasicGameState {
     }
 
     public ArrayList<Stage> stages = new ArrayList<>();
+    public boolean backToMainMenu;
 
     private int stageInt = 0;
 
@@ -53,6 +54,8 @@ public class Game extends BasicGameState {
     Ultimates p1Ult;
     Ultimates p2Ult;
 
+    private StateBasedGame sbg;
+
     private boolean gameOver = false;
     private String winner = "";
 
@@ -66,6 +69,8 @@ public class Game extends BasicGameState {
         stages.add(new TestStage());
         stages.add(new TetrisStage());
         stages.add(new ShibuyaStage());
+
+        this.sbg = sbg;
 
     }
 
@@ -250,8 +255,8 @@ public class Game extends BasicGameState {
             g.drawString(winner,
                     Main.getScreenWidth() / 2f - 60,
                     Main.getScreenHeight() / 2f - 20);
-            g.drawString("Press R to restart",
-                    Main.getScreenWidth() / 2f - 70,
+            g.drawString("Press R to restart or Press B to go back to the main menu",
+                    Main.getScreenWidth() / 2f - 170,
                     Main.getScreenHeight() / 2f + 20);
         }
 
@@ -348,7 +353,7 @@ public class Game extends BasicGameState {
                         player1.setHasUlt(false); // resets the ult charge
 
                         try {
-                            makeUlt(player1,player2,player1.getX(),player1.getY(),1028,30,0,40,30);
+                            makeUlt(player1,player2,player1.getX(),player1.getY(),256,30,0,40,30);
                         } catch (SlickException e) {
                             throw new RuntimeException(e);
                         }
@@ -410,7 +415,12 @@ public class Game extends BasicGameState {
                     }
                 }
                 break;
-
+            case Input.KEY_B: // B is for BACK TO THE MAIN MENU BABYYYYY ~sorry fionn's lack of doing anything well (or at all) is driving me nuts - yes this is a callout do better
+                if(gameOver){
+                    gameOver = false;
+                    winner = "";
+                    sbg.enterState(3);
+                }
 //            case Input.KEY_T:
 //                projectiles.add(new TestProjectile(player1.getX(),player1.getY(),32,32,32,15,0,15,15,player1.getFacing(),player1,player2));
 
@@ -424,6 +434,10 @@ public class Game extends BasicGameState {
         p.resetDamage();
         if(p == player1)
         {
+            p.setHorizontalSpeed(0);
+            p.setVerticalSpeed(0);
+            p.applyKnockback(0,0);
+
             p.setX(1920 / 4);
             p1PrevJumps = 2;
             p.setIFrames(54);
@@ -431,12 +445,16 @@ public class Game extends BasicGameState {
         }
         if(p == player2)
         {
+            p.setHorizontalSpeed(0);
+            p.setVerticalSpeed(0);
+            p.applyKnockback(0,0);
+
             p.setX((1920 * 3 / 4)-25);
             p2PrevJumps = 2;
             p.setIFrames(54);
             p.ChangeCanBeHit(false);
         }
-        p.setY(1080 / 2);
+        p.setY(420);
     }
 
 
@@ -556,6 +574,7 @@ public class Game extends BasicGameState {
 	{
 	playerMarkers(g);
     ultLabels(g);
+    drawStocks(g);
 	}
 
     public void ultLabels(Graphics g) //this would be so much quicker in godot
@@ -598,7 +617,12 @@ public class Game extends BasicGameState {
 		g.drawString(String.valueOf(player2.getDamage()),x2+64,1040);
 	}
 
+    
+    public void mousePressed(int button, int x, int y) {
+    }
+
     private void drawStocks(Graphics g) {
+        g.setColor(Color.green);
         //Change this later to hearts or player icon maybe
         //player 1
         g.drawString(Integer.toString(player1.getStocks()), Images.gojoIcon.getWidth()/4, 100);
@@ -606,9 +630,6 @@ public class Game extends BasicGameState {
         g.drawString(Integer.toString(player2.getStocks()), Main.getScreenWidth()-100, 100);
     }
 
-    
-    public void mousePressed(int button, int x, int y) {
-    }
 
     public Player getPlayer1()
     {
