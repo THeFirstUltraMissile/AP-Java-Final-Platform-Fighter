@@ -395,6 +395,8 @@ public class Player {
         setVerticalSpeed(kbY);
     }
 
+    public int getStocks(){ return stocks; }
+
     public float getAttackRadius() {
         return 40;
     }
@@ -456,7 +458,6 @@ public class Player {
     public boolean isWalking() {
         return !isInAir && isMoving();
     }
-    public int getStocks(){ return stocks; }
 
 }
 

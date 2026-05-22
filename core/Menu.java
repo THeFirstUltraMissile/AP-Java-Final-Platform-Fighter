@@ -1,9 +1,6 @@
 package core;
 
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -41,27 +38,38 @@ public class Menu extends BasicGameState
 
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException
     {
-        g.drawImage(Images.menuBackground,0, 0);
-        g.drawImage(Images.menuLogo, 544, 136);
+//        g.drawImage(Images.menuBackground,0, 0);
+        g.drawImage(Images.menuLogo, 300, 25);
+
+        g.setColor(new Color(
+                60,
+                226,
+                218
+        ));
+//        g.fillRect(0,0,1920,1080);
 
         g.drawString("Press both W and I to begin.", (Main.getScreenWidth()/2)-125, (Main.getScreenHeight()-100));
 
         if (!p1isReady) {
-            g.drawString("Player 1 is not ready.", Main.getScreenWidth()/4, Main.getScreenHeight()/2);
+            g.drawString("Player 1 is not ready.", Main.getScreenWidth()/4-180, Main.getScreenHeight()/2);
         } else {
-            g.drawString("Player 1 is ready!", Main.getScreenWidth()/4, Main.getScreenHeight()/2);
+            g.drawString("Player 1 is ready!", Main.getScreenWidth()/4-180, Main.getScreenHeight()/2);
         }
 
         if (!p2isReady) {
-            g.drawString("Player 2 is not ready.", Main.getScreenWidth()/4*3, Main.getScreenHeight()/2);
+            g.drawString("Player 2 is not ready.", Main.getScreenWidth()/4*3+180, Main.getScreenHeight()/2);
         } else {
-            g.drawString("Player 2 is ready!", Main.getScreenWidth()/4*3, Main.getScreenHeight()/2);
+            g.drawString("Player 2 is ready!", Main.getScreenWidth()/4*3+180, Main.getScreenHeight()/2);
         }
 
-        g.drawString("Press the ; (semicolon) key to view the controls for the player", Main.getScreenWidth()-500, 100);
+
+        g.drawString("Press the ; (semicolon) key to view the controls for the player", Main.getScreenWidth()-700, 100);
 
         if (showControls) {
             g.drawImage(Images.tutorialBackground, 0, 0);
+            g.setColor(Color.black);
+//            g.drawString("other controls not in the image because we didn't put them in for some reason lol,  \n player 1 ult -> q \n player 2 ult -> o \n player 1 specials -> x, c \n player 2 specials -> n, m \n p1 primary attacks -> e,f \n p2 primary attacks -> u,h",
+//                    710,250);
         }
     }
 

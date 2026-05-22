@@ -38,7 +38,7 @@ public class Cleave extends Ultimates{
         this.p = p;
         this.target = target;
 
-        duration = 180;
+        duration = 100;
 
         Images.cleaveAnimation.restart();
     }

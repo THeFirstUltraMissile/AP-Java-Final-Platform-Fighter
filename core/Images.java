@@ -31,14 +31,13 @@ public class Images {
         blankBackground = new Image("media/blankBackground.png");
         shrineBackground = new Image("media/sprites/stages/stage_malfunctioningshrine.png");
         tetrisBackground = new Image("media/sprites/stages/stage_tetris2x.png");
-        menuBackground = new Image("media/sprites/menus/missingHD.png");
         terraBackground = new Image("media/sprites/stages/terrariaStage.png");
+        menuBackground = new Image("media/sprites/menus/missingHD.png");
         tutorialBackground = new Image("media/sprites/menus/TutorialScreen.png");
 
         sukunaIcon = new Image("media/sprites/kaisen/ryomensukuna/assets/icon_ryomensukuna512.png");
         gojoIcon = new Image("media/sprites/kaisen/gojosatoru/assets_gojosatoru/icon_gojosatoru512.png");
-        
-        menuLogo = new Image("media/sprites/menus/missingLogo.png");
+        menuLogo = new Image("media/sprites/menus/tempLogoFix.png");
         SpriteSheet walking = new SpriteSheet("media/sprites/effects/effects_sprinting1.png", 128, 128);
 
         hollowPurpleSpriteSheet = new SpriteSheet("media/sprites/kaisen/gojosatoru/limitless/purple/gojo_unlimitedpurple.png",512,512);
@@ -46,7 +45,7 @@ public class Images {
         hollowPurpleAnimation.setLooping(false);
 
         cleaveSpriteSheet = new SpriteSheet("media/sprites/kaisen/ryomensukuna/shrine/cleave/sukuna_cleave.png",256,256);
-        cleaveAnimation = new Animation(cleaveSpriteSheet,180);
-        cleaveAnimation.setLooping(false);
+        cleaveAnimation = new Animation(cleaveSpriteSheet,50);
+        cleaveAnimation.setLooping(true);
     }
 }

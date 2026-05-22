@@ -4,6 +4,11 @@ import core.Images;
 import core.player.Player;
 import org.newdawn.slick.*;
 
+
+
+
+
+
 public class HollowPurple extends Ultimates{
     Player p;
     Player target;
@@ -17,6 +22,7 @@ public class HollowPurple extends Ultimates{
 
     float dmg;
     float kb;
+    float dir;
 
     float duration;
 
@@ -42,6 +48,8 @@ public class HollowPurple extends Ultimates{
 
         duration = 180;
 
+        dir = p.getFacing();
+
         Images.hollowPurpleAnimation.restart();
     }
 
@@ -62,7 +70,7 @@ public class HollowPurple extends Ultimates{
 
     public void update(){
         if(duration()){
-        x+=xSpeed * p.getFacing();
+        x+=xSpeed*dir;
         y+=ySpeed;
 
         xSpeed += 0.6f;
