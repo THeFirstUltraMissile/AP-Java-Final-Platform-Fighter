@@ -13,6 +13,7 @@ public class Images {
     public static Image terraBackground;
     public static Image menuBackground;
     public static Image tutorialBackground;
+    public static Image tetrisLand; //actual bg and not foreground
 
     public static Image sukunaIcon;
     public static Image gojoIcon;
@@ -34,10 +35,11 @@ public class Images {
         menuBackground = new Image("media/sprites/menus/missingHD.png");
         terraBackground = new Image("media/sprites/stages/terrariaStage.png");
         tutorialBackground = new Image("media/sprites/menus/TutorialScreen.png");
+        tetrisBackground = new Image("media/sprites/stages/tetrisbackground.png");
 
         sukunaIcon = new Image("media/sprites/kaisen/ryomensukuna/assets/icon_ryomensukuna512.png");
         gojoIcon = new Image("media/sprites/kaisen/gojosatoru/assets_gojosatoru/icon_gojosatoru512.png");
-        
+
         menuLogo = new Image("media/sprites/menus/missingLogo.png");
         SpriteSheet walking = new SpriteSheet("media/sprites/effects/effects_sprinting1.png", 128, 128);
 

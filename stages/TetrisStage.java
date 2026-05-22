@@ -12,7 +12,7 @@ public class TetrisStage extends Stage{
     StageCollision testCollision;
 
     public TetrisStage() {
-        name = "Teris";
+        name = "Tetris";
         song = Sounds.TestSong;
         background = Images.tetrisBackground;
 
@@ -30,8 +30,9 @@ public class TetrisStage extends Stage{
 
     public void renderStage(Graphics g) {
         testCollision.makeBox(g, x, y, width, height);
-        g.setColor(Color.blue);
-        g.drawRect(x, y, width, height);
+        g.drawImage(Images.tetrisLand, 0, 0);
+        //g.setColor(Color.blue);
+        //g.drawRect(x, y, width, height);
         g.drawImage(background, 0, 225);
 
 
