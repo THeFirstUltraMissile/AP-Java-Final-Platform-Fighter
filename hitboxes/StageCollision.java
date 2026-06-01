@@ -24,6 +24,13 @@ public class StageCollision extends Collision{
                 System.out.println("in air -- test --");
             }
         }
+        if(player.getY()+player.getHeight()==stageY&&player.getX()>stageX&&player.getX()<stageX+stageW)
+        {
+            player.isInAir = false;
+        }
+        else {
+            player.isInAir = true;
+        }
 
 
         if (isInBox(player.getRight(), player.getY() + (float) player.getHeight() /2, stageX, stageY, stageW, stageH)) {

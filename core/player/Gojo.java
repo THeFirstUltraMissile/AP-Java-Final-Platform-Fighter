@@ -27,7 +27,7 @@ public class Gojo extends Player {
                 "media/sprites/kaisen/gojosatoru/assets_gojosatoru/satoru.png", 670, 670);
 
         SpriteSheet lightAttackSheet = new SpriteSheet(
-                "media/sprites/unused/stone.png", 128, 128);
+                "media/sprites/miku/special1/miku_beamexplosion.png", 128, 128);
 
         SpriteSheet aerialAttackSheet = new SpriteSheet(
         "media/sprites/kaisen/ryomensukuna/basic/sukuna_jab2.png",128,128); //temp

@@ -317,6 +317,7 @@ public class Player {
     public float getX() {
         return x;
     }
+    public float getCenterX() {return x+(100*facing);}
 
     public float getY() {
         return y;

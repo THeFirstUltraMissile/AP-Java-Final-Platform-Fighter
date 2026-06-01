@@ -331,8 +331,10 @@ public class Game extends BasicGameState {
             case Input.KEY_E:
 
 
-                if(player1!=null&&!player1.getIsInAir()) player1.aerialAttack(35); //if in air do aerial else normie attack
-                else {  if (player1 != null) player1.lightAttack(49); }
+                if(player1!=null&&player1.getIsInAir()){ player1.aerialAttack(35);System.out.println(player1.getIsInAir());} //if in air do aerial else normie attack
+                else {
+                    if (player1 != null) {player1.lightAttack(49); System.out.println(player1.getIsInAir());}
+                }
                 break;
 
             case Input.KEY_F:
@@ -353,7 +355,7 @@ public class Game extends BasicGameState {
                         player1.setHasUlt(false); // resets the ult charge
 
                         try {
-                            makeUlt(player1,player2,player1.getX(),player1.getY(),256,30,0,40,30);
+                            makeUlt(player1,player2,player1.getCenterX(),player1.getY(),256,30,0,40,30);
                         } catch (SlickException e) {
                             throw new RuntimeException(e);
                         }
@@ -370,8 +372,10 @@ public class Game extends BasicGameState {
 
             case Input.KEY_U:
 
-                if(player2!=null&&player2.getIsInAir()) player2.aerialAttack(35);
-                else{   if (player2 != null) { player2.lightAttack(49); } }
+                if(player2!=null&&player2.getIsInAir()) {player2.aerialAttack(35);}
+                else{
+                    if (player2 != null) { player2.lightAttack(49); }
+                }
 
                 break;
 
@@ -392,7 +396,7 @@ public class Game extends BasicGameState {
                 {
                     player2.setHasUlt(false);
                     try {
-                        makeUlt(player2,player1,player2.getX(),player2.getY(),256,10,0,40,15);
+                        makeUlt(player2,player1,player2.getCenterX(),player2.getY(),256,10,0,40,15);
                     } catch (SlickException e) {
                         throw new RuntimeException(e);
                     }
