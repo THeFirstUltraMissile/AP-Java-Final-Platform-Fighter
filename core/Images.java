@@ -14,6 +14,7 @@ public class Images {
     public static Image menuBackground;
     public static Image tutorialBackground;
     public static Image MusicStage;
+    public static Image tetrisBackdrop;
     public static SpriteSheet MusicStageSS;
     public static Animation MusicStageAnimation;
 
@@ -48,6 +49,7 @@ public class Images {
         menuBackground = new Image("media/sprites/menus/missingHD.png");
         tutorialBackground = new Image("media/sprites/menus/TutorialScreen.png");
         MusicStage = new Image("media/sprites/stages/MusicStage.png");
+        tetrisBackdrop = new Image("media/sprites/stages/tetrisBackground.png")
         MusicStageSS = new SpriteSheet("media/sprites/stages/MusicStageSS.png",1920,1080);
         MusicStageAnimation = new Animation(MusicStageSS, 360);
 
