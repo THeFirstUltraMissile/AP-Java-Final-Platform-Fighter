@@ -29,7 +29,7 @@ public class TetrisStage extends Stage{
 
 
     public void renderStage(Graphics g) {
-        testCollision.makeBox(g, x, y, width, height);
+//        testCollision.makeBox(g, x, y, width, height);
 //        g.setColor(Color.blue);
 //        g.drawRect(x, y, width, height);
         g.drawImage(background, 0, 225);

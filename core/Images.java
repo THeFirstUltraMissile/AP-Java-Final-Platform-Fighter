@@ -13,6 +13,9 @@ public class Images {
     public static Image terraBackground;
     public static Image menuBackground;
     public static Image tutorialBackground;
+    public static Image MusicStage;
+    public static SpriteSheet MusicStageSS;
+    public static Animation MusicStageAnimation;
 
     public static Image sukunaIcon;
     public static Image gojoIcon;
@@ -27,6 +30,16 @@ public class Images {
 
     public static Animation walking;
 
+    public static Animation sukunaIdle;
+    public static Animation sukunaLight;
+    public static Animation sukunaHeavy;
+    public static Animation sukunaAerial;
+
+    public static SpriteSheet sukunaIdleSS;
+    public static SpriteSheet sukunaLightSS;
+    public static SpriteSheet sukunaHeavySS;
+    public static SpriteSheet sukunaAerialSS;
+
     public static void loadImages() throws SlickException {
         blankBackground = new Image("media/blankBackground.png");
         shrineBackground = new Image("media/sprites/stages/stage_malfunctioningshrine.png");
@@ -34,6 +47,9 @@ public class Images {
         terraBackground = new Image("media/sprites/stages/terrariaStage.png");
         menuBackground = new Image("media/sprites/menus/missingHD.png");
         tutorialBackground = new Image("media/sprites/menus/TutorialScreen.png");
+        MusicStage = new Image("media/sprites/stages/MusicStage.png");
+        MusicStageSS = new SpriteSheet("media/sprites/stages/MusicStageSS.png",1920,1080);
+        MusicStageAnimation = new Animation(MusicStageSS, 360);
 
         sukunaIcon = new Image("media/sprites/kaisen/ryomensukuna/assets/icon_ryomensukuna512.png");
         gojoIcon = new Image("media/sprites/kaisen/gojosatoru/assets_gojosatoru/icon_gojosatoru512.png");
@@ -47,5 +63,15 @@ public class Images {
         cleaveSpriteSheet = new SpriteSheet("media/sprites/kaisen/ryomensukuna/shrine/cleave/sukuna_cleave.png",256,256);
         cleaveAnimation = new Animation(cleaveSpriteSheet,50);
         cleaveAnimation.setLooping(true);
+
+        sukunaIdleSS = new SpriteSheet("media/sprites/kaisen/ryomensukuna/assets/thukuna.png", 645, 645);
+        sukunaLightSS = new SpriteSheet("media/sprites/kaisen/ryomensukuna/basic/sukuna_jab.png", 128, 128);
+        sukunaHeavySS = new SpriteSheet("media/sprites/kaisen/ryomensukuna/shrine/dismantle/sukuna_dismantleimpact.png", 256, 256);
+        sukunaAerialSS = new SpriteSheet("media/sprites/kaisen/ryomensukuna/basic/sukuna_jab2.png",128,128);
+
+        sukunaIdle = new Animation(sukunaIdleSS,150);
+        sukunaLight = new Animation(sukunaLightSS, 60);
+        sukunaHeavy = new Animation(sukunaHeavySS, 60);
+        sukunaAerial = new Animation(sukunaAerialSS, 60);
     }
 }

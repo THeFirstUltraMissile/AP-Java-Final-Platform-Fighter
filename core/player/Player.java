@@ -159,7 +159,7 @@ public class Player {
     }
 
     public void lightAttack(int duration) {
-        if (!isAttacking) {
+        if (!isAttacking()) {
             isAttacking = true;
             attackTimer = duration;
             heavyAttack = false;

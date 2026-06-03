@@ -12,10 +12,7 @@ import hitboxes.AttackHitBox;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import stages.ShibuyaStage;
-import stages.Stage;
-import stages.TestStage;
-import stages.TetrisStage;
+import stages.*;
 
 import java.util.ArrayList;
 
@@ -66,9 +63,10 @@ public class Game extends BasicGameState {
         gc.setShowFPS(true);
         Images.loadImages();
         Sounds.loadSounds();
-        stages.add(new TestStage());
         stages.add(new TetrisStage());
+        stages.add(new TestStage());
         stages.add(new ShibuyaStage());
+        stages.add(new MusicStage());
 
         this.sbg = sbg;
 
@@ -302,8 +300,14 @@ public class Game extends BasicGameState {
         winner = "";
         p1CharIndex = CharacterSelect.p1Choice;
         p2CharIndex = CharacterSelect.p2Choice;
-        player1 = buildPlayer(p1CharIndex, (1920 / 3),     1080 / 2,1);
-        player2 = buildPlayer(p2CharIndex, (1920 * 2 / 3), 1080 / 2,-1);
+        if(stages.get(StageSelect.stageChoice).name.equals("Music"))
+        {
+            player1 = buildPlayer(p1CharIndex, (190),     1080 / 2,1);
+            player2 = buildPlayer(p2CharIndex, (1920 -415), 1080 / 2,-1);
+        } else {
+            player1 = buildPlayer(p1CharIndex, (1920 / 3), 1080 / 2, 1);
+            player2 = buildPlayer(p2CharIndex, (1920 * 2 / 3), 1080 / 2, -1);
+        }
         p1PrevJumps = 2;
         p2PrevJumps = 2;
     }
@@ -331,10 +335,9 @@ public class Game extends BasicGameState {
             case Input.KEY_E:
 
 
-                if(player1!=null&&player1.getIsInAir()){ player1.aerialAttack(35);System.out.println(player1.getIsInAir());} //if in air do aerial else normie attack
-                else {
+//
                     if (player1 != null) {player1.lightAttack(49); System.out.println(player1.getIsInAir());}
-                }
+//
                 break;
 
             case Input.KEY_F:
@@ -372,10 +375,9 @@ public class Game extends BasicGameState {
 
             case Input.KEY_U:
 
-                if(player2!=null&&player2.getIsInAir()) {player2.aerialAttack(35);}
-                else{
-                    if (player2 != null) { player2.lightAttack(49); }
-                }
+
+                if (player2 != null) { player2.lightAttack(49); }
+
 
                 break;
 
@@ -412,9 +414,14 @@ public class Game extends BasicGameState {
                     gameOver = false;
                     winner = "";
                     try {
+                        if(stages.get(StageSelect.stageChoice).name.equals("Music"))
+                        {
+                            player1 = buildPlayer(p1CharIndex, 190,     1080 / 2,1);
+                            player2 = buildPlayer(p2CharIndex, (1920 -415), 1080 / 2,-1);
+                        }else{
                         player1 = buildPlayer(p1CharIndex, 1920 / 4, 1080 / 2,1);
                         player2 = buildPlayer(p2CharIndex, (1920 * 3 / 4)-25, 1080 / 2,-1);
-                    } catch (SlickException e) {
+                    } }catch (SlickException e) {
                         e.printStackTrace();
                     }
                 }
@@ -442,7 +449,11 @@ public class Game extends BasicGameState {
             p.setVerticalSpeed(0);
             p.applyKnockback(0,0);
 
-            p.setX(1920 / 4);
+            if(stages.get(StageSelect.stageChoice).name.equals("Music"))
+            {
+            p.setX(190);
+            }else{
+            p.setX(1920 / 4);}
             p1PrevJumps = 2;
             p.setIFrames(54);
             p.ChangeCanBeHit(false);
@@ -453,7 +464,11 @@ public class Game extends BasicGameState {
             p.setVerticalSpeed(0);
             p.applyKnockback(0,0);
 
-            p.setX((1920 * 3 / 4)-25);
+            if(stages.get(StageSelect.stageChoice).name.equals("Music"))
+            {
+                p.setX(1920-415);
+            }else{
+            p.setX((1920 * 3 / 4)-25);}
             p2PrevJumps = 2;
             p.setIFrames(54);
             p.ChangeCanBeHit(false);

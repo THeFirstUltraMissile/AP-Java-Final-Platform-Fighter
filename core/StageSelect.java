@@ -12,12 +12,13 @@ public class StageSelect extends BasicGameState {
 
     public static int stageChoice = 0;
 
-    private static final int NUM_STAGES = 3;
-    private static final String[] STAGE_NAMES  = { "Malfunctioning Shrine", "Tetris Omega","Conflicting Evils" };
+    private static final int NUM_STAGES = 4;
+    private static final String[] STAGE_NAMES  = {  "Tetris Omega","Malfunctioning Shrine","Conflicting Evils","Fun Music" };
     private static final String[] STAGE_DESC   = {
-            "Sukuna cast his Domain Expansion, Malevolent Shrine, but due to the brain damage he had acquired not long ago, his Shrine won't obey his commands..",
             "The blocky stage of the arena is made of the fallen brethren of the unknown fighter, yet to be seen..",
-            "The underground's internal conflict between the two world evils, The world slowly splitting in two."
+            "Sukuna cast his Domain Expansion, Malevolent Shrine, but due to the brain damage he had acquired not long ago, his Shrine won't obey his commands..",
+            "The underground's internal conflict between the two world evils, The world slowly splitting in two.",
+            "you broke the speakers! how could you!!!! :C "
 
 
     };
@@ -31,9 +32,10 @@ public class StageSelect extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         stagePreviews = new Image[NUM_STAGES];
-        stagePreviews[0] = new Image("media/sprites/stages/stage_malfunctioningshrine.png");
+        stagePreviews[0] = new Image("media/sprites/stages/stage_tetris2x.png");
+        stagePreviews[1] = new Image("media/sprites/stages/stage_malfunctioningshrine.png");
         stagePreviews[2] = new Image("media/sprites/stages/terrariaStage.png");
-        stagePreviews[1] = new Image("media/sprites/stages/stage_tetris2x.png");
+        stagePreviews[3] = new Image("media/sprites/stages/MusicStage.png");
     }
 
     @Override

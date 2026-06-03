@@ -42,8 +42,8 @@ public class Gojo extends Player {
         heavyAttackAnim = new Animation(heavySheet, 60);
         heavyAttackAnim.setLooping(false);
 
-        aerialAttackAnim = new Animation(aerialAttackSheet,60);
-        aerialAttackAnim.setLooping(false);
+//        aerialAttackAnim = new Animation(aerialAttackSheet,60);
+//        aerialAttackAnim.setLooping(false);
 
         currentAnim = idleAnim;
     }
@@ -75,10 +75,10 @@ public class Gojo extends Player {
             if (!wasLightAttacking) lightAttackAnim.restart();
             currentAnim = lightAttackAnim;
         }
-            else if (isAerialAttacking()) {
-                if(!wasAerialAttacking) aerialAttackAnim.restart();
-                currentAnim = aerialAttackAnim;
-            }
+//            else if (isAerialAttacking()) {
+//                if(!wasAerialAttacking) aerialAttackAnim.restart();
+//                currentAnim = aerialAttackAnim;
+//            }
          else {
             currentAnim = idleAnim;
         }
@@ -108,7 +108,7 @@ public class Gojo extends Player {
     }
     public void drawAttack(Graphics g) {
         if (!isAttacking()) return;
-        Animation attackAnim = isHeavyAttacking() ? heavyAttackAnim : isLightAttacking() ? lightAttackAnim : aerialAttackAnim ;
+        Animation attackAnim = isHeavyAttacking() ? heavyAttackAnim : lightAttackAnim;
         org.newdawn.slick.Image frame = attackAnim.getCurrentFrame();
         if (isFacingRight()) {
             frame.draw(getX() + getWidth(), getY(), getWidth(), getHeight());

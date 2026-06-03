@@ -1,5 +1,6 @@
 package core.player;
 
+import core.Images;
 import org.newdawn.slick.*;
 
 public class Sukuna extends Player {
@@ -21,29 +22,17 @@ public class Sukuna extends Player {
         jumpHeight = 20;
         walkSpeed = 1.5;
 
-        // 1 frame 645
-        SpriteSheet idleSheet = new SpriteSheet(
-                "media/sprites/kaisen/ryomensukuna/assets/thukuna.png", 645, 645);
 
-        // 13 frames
-        SpriteSheet lightAttackSheet = new SpriteSheet(
-                "media/sprites/kaisen/ryomensukuna/basic/sukuna_jab.png", 128, 128);
+        idleAnim = Images.sukunaIdle;
 
-        SpriteSheet aerialAttackSheet = new SpriteSheet(
-                "media/sprites/kaisen/ryomensukuna/basic/sukuna_jab2.png",128,128); //temp
-
-        SpriteSheet heavySheet = new SpriteSheet("media/sprites/kaisen/ryomensukuna/shrine/dismantle/sukuna_dismantleimpact.png", 256, 256);
-
-        idleAnim = new Animation(idleSheet, 150);
-
-        heavyAttackAnim = new Animation(heavySheet, 60);
+        heavyAttackAnim = Images.sukunaHeavy;
         heavyAttackAnim.setLooping(false);
 
-        lightAttackAnim = new Animation(lightAttackSheet, 60);
+        lightAttackAnim = Images.sukunaLight;
         lightAttackAnim.setLooping(false);
 
-        aerialAttackAnim = new Animation(aerialAttackSheet,60);
-        aerialAttackAnim.setLooping(false);
+//        aerialAttackAnim = Images.sukunaAerial;
+//        aerialAttackAnim.setLooping(false);
 
         currentAnim = idleAnim;
     }
@@ -70,22 +59,21 @@ public class Sukuna extends Player {
         if (isHeavyAttacking()) {
             if (!wasHeavyAttacking) heavyAttackAnim.restart();
             currentAnim = heavyAttackAnim;
-        }
-        else if (isAerialAttacking()) {
-            if (!wasAerialAttacking) aerialAttackAnim.restart();
-            currentAnim = aerialAttackAnim;
-        }
-        else if (isLightAttacking()) {
+        } else if (isLightAttacking()) {
             if (!wasLightAttacking) lightAttackAnim.restart();
             currentAnim = lightAttackAnim;
         }
+//        else if (isAerialAttacking()) {
+//            if(!wasAerialAttacking) aerialAttackAnim.restart();
+//            currentAnim = aerialAttackAnim;
+//        }
         else {
             currentAnim = idleAnim;
         }
 
         wasHeavyAttacking = isHeavyAttacking();
-        wasLightAttacking = isLightAttacking();
         wasAerialAttacking = isAerialAttacking();
+        wasLightAttacking = isLightAttacking();
         currentAnim.update(16);
 
         // move (nerfing from 18 to 12 (33%))
@@ -106,7 +94,7 @@ public class Sukuna extends Player {
 
     public void drawAttack(Graphics g) {
         if (!isAttacking()) return;
-        Animation attackAnim = isHeavyAttacking() ? heavyAttackAnim : isLightAttacking() ? lightAttackAnim : aerialAttackAnim ;
+        Animation attackAnim = isHeavyAttacking() ? heavyAttackAnim : lightAttackAnim;
         org.newdawn.slick.Image frame = attackAnim.getCurrentFrame();
         if (isFacingRight()) {
             frame.draw(getX() + getWidth(), getY(), getWidth(), getHeight());
